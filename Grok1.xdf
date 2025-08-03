@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="windows-1251"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <XDF VERSION="1.50" xmlns="http://www.tunerpro.net/XDFv150.xsd">
   <XDFHEADER>
     <deftitle>Bosch ME7.5 4B0906018DJ 1.8T 150HP FULL TUNING</deftitle>
@@ -166,44 +166,10 @@
     <label index="2">30</label>
     <label index="3">60</label>
   </XDFAXIS>
-    <!-- Топливо -->
-  <XDFTABLE uniqueid="0xB301" flags="0x0">
-    <title>LAMFA – Requested Lambda</title>
-    <category>Датчики/Коррекции</category>
-    <description>Requested lambda map (16x16 RPM vs Load)</description>
-    <XDFAXIS id="x" uniqueid="0xA001" />
-    <XDFAXIS id="y" uniqueid="0xA003" />
-    <EMBEDDEDDATA datatype="UINT8" rows="16" cols="16" address="0x1B000" endian="lohi" />
-    <conversion units="Lambda">value * 0.00390625</conversion>
-  </XDFTABLE>
-  <XDFTABLE uniqueid="0xB302" flags="0x0">
-    <title>FKLAMNA – Afterstart Enrich</title>
-    <category>Датчики/Коррекции</category>
-    <description>Afterstart fuel enrich factor</description>
-    <XDFAXIS id="x" uniqueid="0xA009" />
-    <EMBEDDEDDATA datatype="UINT8" rows="1" cols="4" address="0x1B880" endian="lohi" />
-    <conversion units="%">value * 0.390625</conversion>
-  </XDFTABLE>
-  <XDFTABLE uniqueid="0xB303" flags="0x0">
-    <title>FKATW – Cat Warm-up AFR</title>
-    <category>Датчики/Коррекции</category>
-    <description>Cat warm-up lambda adjustment</description>
-    <XDFAXIS id="x" uniqueid="0xA008" />
-    <EMBEDDEDDATA datatype="UINT8" rows="1" cols="10" address="0x19580" endian="lohi" />
-    <conversion units="Lambda">value * 0.00390625</conversion>
-  </XDFTABLE>
-  <XDFTABLE uniqueid="0xB304" flags="0x0">
-    <title>KFLAMKOR – Lambda Correction</title>
-    <category>Датчики/Коррекции</category>
-    <description>Lambda signal correction (16x1)</description>
-    <XDFAXIS id="x" uniqueid="0xA001" />
-    <EMBEDDEDDATA datatype="UINT8" rows="1" cols="16" address="0x1B840" endian="lohi" />
-    <conversion units="%">value * 0.390625</conversion>
-  </XDFTABLE>
 
   <!-- Зажигание -->
   <XDFTABLE uniqueid="0xB101" flags="0x0">
-    <title>KFZW – Base Ignition Timing</title>
+    <title>KFZW - Base Ignition Timing</title>
     <category>Зажигание</category>
     <description>Base ignition timing map (16x16 RPM vs Load)</description>
     <XDFAXIS id="x" uniqueid="0xA001" />
@@ -212,7 +178,7 @@
     <conversion units="°">value * 0.75</conversion>
   </XDFTABLE>
   <XDFTABLE uniqueid="0xB102" flags="0x0">
-    <title>KFZW2 – Ignition Timing (VVT Active)</title>
+    <title>KFZW2 - Ignition Timing (VVT Active)</title>
     <category>Зажигание</category>
     <description>Ignition timing when VVT is active (16x16)</description>
     <XDFAXIS id="x" uniqueid="0xA001" />
@@ -221,7 +187,7 @@
     <conversion units="°">value * 0.75</conversion>
   </XDFTABLE>
   <XDFTABLE uniqueid="0xB103" flags="0x0">
-    <title>KRFKLN – Knock Retard</title>
+    <title>KRFKLN - Knock Retard</title>
     <category>Зажигание</category>
     <description>Knock retard per event (16x16)</description>
     <XDFAXIS id="x" uniqueid="0xA001" />
@@ -232,7 +198,7 @@
 
   <!-- Наддув -->
   <XDFTABLE uniqueid="0xB201" flags="0x0">
-    <title>KFLDRL – Requested Load</title>
+    <title>KFLDRL - Requested Load</title>
     <category>Наддув</category>
     <description>Requested load map (16x16 RPM vs Load)</description>
     <XDFAXIS id="x" uniqueid="0xA001" />
@@ -241,7 +207,7 @@
     <conversion units="% Load">value * 0.001</conversion>
   </XDFTABLE>
   <XDFTABLE uniqueid="0xB202" flags="0x0">
-    <title>KFLDRSOL – Boost Request</title>
+    <title>KFLDRSOL - Boost Request</title>
     <category>Наддув</category>
     <description>Requested boost pressure map</description>
     <XDFAXIS id="x" uniqueid="0xA001" />
@@ -250,22 +216,23 @@
     <conversion units="mbar">value * 0.1</conversion>
   </XDFTABLE>
   <XDFTABLE uniqueid="0xB203" flags="0x0">
-    <title>LDRPID – Boost PID Constants</title>
+    <title>LDRPID - Boost PID Constants</title>
     <category>Наддув</category>
     <description>Boost PID control constants</description>
     <EMBEDDEDDATA datatype="FLOAT" rows="1" cols="3" address="0x1BD00" endian="lohi" />
     <conversion>value</conversion>
   </XDFTABLE>
   <XDFTABLE uniqueid="0xB204" flags="0x0">
-    <title>KFLDHBN – Overboost Limit</title>
+    <title>KFLDHBN - Overboost Limit</title>
     <category>Наддув</category>
     <description>Overboost pressure ratio limit</description>
     <EMBEDDEDDATA datatype="UINT16" rows="1" cols="1" address="0x1BE00" endian="lohi" />
     <conversion units="ratio">value * 0.1</conversion>
   </XDFTABLE>
-    <!-- Топливо -->
+
+  <!-- Топливо -->
   <XDFTABLE uniqueid="0xB301" flags="0x0">
-    <title>LAMFA – Requested Lambda</title>
+    <title>LAMFA - Requested Lambda</title>
     <category>Датчики/Коррекции</category>
     <description>Requested lambda map (16x16 RPM vs Load)</description>
     <XDFAXIS id="x" uniqueid="0xA001" />
@@ -274,7 +241,7 @@
     <conversion units="Lambda">value * 0.00390625</conversion>
   </XDFTABLE>
   <XDFTABLE uniqueid="0xB302" flags="0x0">
-    <title>FKLAMNA – Afterstart Enrich</title>
+    <title>FKLAMNA - Afterstart Enrich</title>
     <category>Датчики/Коррекции</category>
     <description>Afterstart fuel enrich factor</description>
     <XDFAXIS id="x" uniqueid="0xA009" />
@@ -282,7 +249,7 @@
     <conversion units="%">value * 0.390625</conversion>
   </XDFTABLE>
   <XDFTABLE uniqueid="0xB303" flags="0x0">
-    <title>FKATW – Cat Warm-up AFR</title>
+    <title>FKATW - Cat Warm-up AFR</title>
     <category>Датчики/Коррекции</category>
     <description>Cat warm-up lambda adjustment</description>
     <XDFAXIS id="x" uniqueid="0xA008" />
@@ -290,7 +257,7 @@
     <conversion units="Lambda">value * 0.00390625</conversion>
   </XDFTABLE>
   <XDFTABLE uniqueid="0xB304" flags="0x0">
-    <title>KFLAMKOR – Lambda Correction</title>
+    <title>KFLAMKOR - Lambda Correction</title>
     <category>Датчики/Коррекции</category>
     <description>Lambda signal correction (16x1)</description>
     <XDFAXIS id="x" uniqueid="0xA001" />
@@ -298,71 +265,9 @@
     <conversion units="%">value * 0.390625</conversion>
   </XDFTABLE>
 
-  <!-- Зажигание -->
-  <XDFTABLE uniqueid="0xB101" flags="0x0">
-    <title>KFZW – Base Ignition Timing</title>
-    <category>Зажигание</category>
-    <description>Base ignition timing map (16x16 RPM vs Load)</description>
-    <XDFAXIS id="x" uniqueid="0xA001" />
-    <XDFAXIS id="y" uniqueid="0xA003" />
-    <EMBEDDEDDATA datatype="INT16" rows="16" cols="16" address="0x15E00" endian="lohi" />
-    <conversion units="°">value * 0.75</conversion>
-  </XDFTABLE>
-  <XDFTABLE uniqueid="0xB102" flags="0x0">
-    <title>KFZW2 – Ignition Timing (VVT Active)</title>
-    <category>Зажигание</category>
-    <description>Ignition timing when VVT is active (16x16)</description>
-    <XDFAXIS id="x" uniqueid="0xA001" />
-    <XDFAXIS id="y" uniqueid="0xA003" />
-    <EMBEDDEDDATA datatype="INT16" rows="16" cols="16" address="0x1C500" endian="lohi" />
-    <conversion units="°">value * 0.75</conversion>
-  </XDFTABLE>
-  <XDFTABLE uniqueid="0xB103" flags="0x0">
-    <title>KRFKLN – Knock Retard</title>
-    <category>Зажигание</category>
-    <description>Knock retard per event (16x16)</description>
-    <XDFAXIS id="x" uniqueid="0xA001" />
-    <XDFAXIS id="y" uniqueid="0xA003" />
-    <EMBEDDEDDATA datatype="INT16" rows="16" cols="16" address="0x16250" endian="lohi" />
-    <conversion units="°">value * 0.75</conversion>
-  </XDFTABLE>
-
-  <!-- Наддув -->
-  <XDFTABLE uniqueid="0xB201" flags="0x0">
-    <title>KFLDRL – Requested Load</title>
-    <category>Наддув</category>
-    <description>Requested load map (16x16 RPM vs Load)</description>
-    <XDFAXIS id="x" uniqueid="0xA001" />
-    <XDFAXIS id="y" uniqueid="0xA003" />
-    <EMBEDDEDDATA datatype="UINT16" rows="16" cols="16" address="0x16390" endian="lohi" />
-    <conversion units="% Load">value * 0.001</conversion>
-  </XDFTABLE>
-  <XDFTABLE uniqueid="0xB202" flags="0x0">
-    <title>KFLDRSOL – Boost Request</title>
-    <category>Наддув</category>
-    <description>Requested boost pressure map</description>
-    <XDFAXIS id="x" uniqueid="0xA001" />
-    <XDFAXIS id="y" uniqueid="0xA003" />
-    <EMBEDDEDDATA datatype="UINT16" rows="16" cols="16" address="0x1BC00" endian="lohi" />
-    <conversion units="mbar">value * 0.1</conversion>
-  </XDFTABLE>
-  <XDFTABLE uniqueid="0xB203" flags="0x0">
-    <title>LDRPID – Boost PID Constants</title>
-    <category>Наддув</category>
-    <description>Boost PID control constants</description>
-    <EMBEDDEDDATA datatype="FLOAT" rows="1" cols="3" address="0x1BD00" endian="lohi" />
-    <conversion>value</conversion>
-  </XDFTABLE>
-  <XDFTABLE uniqueid="0xB204" flags="0x0">
-    <title>KFLDHBN – Overboost Limit</title>
-    <category>Наддув</category>
-    <description>Overboost pressure ratio limit</description>
-    <EMBEDDEDDATA datatype="UINT16" rows="1" cols="1" address="0x1BE00" endian="lohi" />
-    <conversion units="ratio">value * 0.1</conversion>
-  </XDFTABLE>
-    <!-- Лимитеры -->
+  <!-- Лимитеры -->
   <XDFTABLE uniqueid="0xB401" flags="0x0">
-    <title>LDRXN – Maximum Load (Boost Limit)</title>
+    <title>LDRXN - Maximum Load (Boost Limit)</title>
     <category>Лимитеры</category>
     <description>Maximum specified load in boost control (16x1)</description>
     <XDFAXIS id="x" uniqueid="0xA001" />
@@ -370,7 +275,7 @@
     <conversion units="% Load">value * 0.001</conversion>
   </XDFTABLE>
   <XDFTABLE uniqueid="0xB402" flags="0x0">
-    <title>LDRXNZK – Knock Load Limit</title>
+    <title>LDRXNZK - Knock Load Limit</title>
     <category>Лимитеры</category>
     <description>Max load under knock conditions (16x1)</description>
     <XDFAXIS id="x" uniqueid="0xA001" />
@@ -378,7 +283,7 @@
     <conversion units="% Load">value * 0.001</conversion>
   </XDFTABLE>
   <XDFTABLE uniqueid="0xB403" flags="0x0">
-    <title>KFMRES – Engine Torque Limiter</title>
+    <title>KFMRES - Engine Torque Limiter</title>
     <category>Лимитеры</category>
     <description>Maximum engine moment (torque) by RPM (protective limiter)</description>
     <XDFAXIS id="x" uniqueid="0xA001" />
@@ -386,28 +291,28 @@
     <conversion units="Nm">value * 0.1</conversion>
   </XDFTABLE>
   <XDFTABLE uniqueid="0xB404" flags="0x0">
-    <title>NMAX – Rev Limiter (Soft Cut)</title>
+    <title>NMAX - Rev Limiter (Soft Cut)</title>
     <category>Лимитеры</category>
     <description>Maximum engine speed, soft limiter (fuel cut initiation)</description>
     <EMBEDDEDDATA datatype="UINT16" rows="1" cols="1" address="0x1630A" endian="lohi" />
     <conversion units="RPM">value * 0.25</conversion>
   </XDFTABLE>
   <XDFTABLE uniqueid="0xB405" flags="0x0">
-    <title>NMAXOG – Rev Limiter (Hard Cut)</title>
+    <title>NMAXOG - Rev Limiter (Hard Cut)</title>
     <category>Лимитеры</category>
     <description>Raised maximum engine speed, hard cut limiter</description>
     <EMBEDDEDDATA datatype="UINT16" rows="1" cols="1" address="0x16312" endian="lohi" />
     <conversion units="RPM">value * 0.25</conversion>
   </XDFTABLE>
   <XDFTABLE uniqueid="0xB406" flags="0x0">
-    <title>VMAX – Speed Limiter</title>
+    <title>VMAX - Speed Limiter</title>
     <category>Лимитеры</category>
     <description>Maximum vehicle speed limiter (if applicable)</description>
     <EMBEDDEDDATA datatype="UINT8" rows="1" cols="1" address="0x1847A" endian="lohi" />
     <conversion units="km/h">value</conversion>
   </XDFTABLE>
   <XDFSCALAR uniqueid="0xD201" flags="0x0">
-    <title>MDMAX – Max Torque Abs</title>
+    <title>MDMAX - Max Torque Abs</title>
     <category>Лимитеры</category>
     <description>Maximum torque absolute limiter</description>
     <address>0x1BA50</address>
@@ -415,7 +320,7 @@
     <conversion units="Nm">value * 0.1</conversion>
   </XDFSCALAR>
   <XDFSCALAR uniqueid="0xD202" flags="0x0">
-    <title>DNMAXH – Rev Hysteresis</title>
+    <title>DNMAXH - Rev Hysteresis</title>
     <category>Лимитеры</category>
     <description>Rev limiter hysteresis</description>
     <address>0x16304</address>
@@ -425,7 +330,7 @@
 
   <!-- Датчики/Коррекции -->
   <XDFTABLE uniqueid="0xB501" flags="0x0">
-    <title>MLHFM – MAF Calibration Curve</title>
+    <title>MLHFM - MAF Calibration Curve</title>
     <category>Датчики/Коррекции</category>
     <description>Mass Air Flow sensor transfer function (512x1)</description>
     <XDFAXIS id="x" uniqueid="0xA006" />
@@ -433,7 +338,7 @@
     <conversion units="kg/h">value * 0.001</conversion>
   </XDFTABLE>
   <XDFTABLE uniqueid="0xB502" flags="0x0">
-    <title>KFKHFM – MAF Correction Map</title>
+    <title>KFKHFM - MAF Correction Map</title>
     <category>Датчики/Коррекции</category>
     <description>MAF signal correction (14x14)</description>
     <XDFAXIS id="y" uniqueid="0xA001" />
@@ -442,7 +347,7 @@
     <conversion units="%">value * 0.390625</conversion>
   </XDFTABLE>
   <XDFTABLE uniqueid="0xB503" flags="0x0">
-    <title>KFPED – Throttle Pedal Map</title>
+    <title>KFPED - Throttle Pedal Map</title>
     <category>Датчики/Коррекции</category>
     <description>Driver pedal position to requested torque conversion (16x8)</description>
     <XDFAXIS id="y" uniqueid="0xA002" />
@@ -451,7 +356,7 @@
     <conversion units="% Load">value * 0.003052</conversion>
   </XDFTABLE>
   <XDFTABLE uniqueid="0xB504" flags="0x0">
-    <title>LDIATA – IAT Load Reduction</title>
+    <title>LDIATA - IAT Load Reduction</title>
     <category>Датчики/Коррекции</category>
     <description>Intake Air Temp load limit (reduces load at high IAT)</description>
     <XDFAXIS id="x" uniqueid="0xA007" />
@@ -459,16 +364,17 @@
     <conversion units="% Load">value * 0.7813</conversion>
   </XDFTABLE>
   <XDFTABLE uniqueid="0xB505" flags="0x0">
-    <title>KFZW_UM – Ignition Offset (Warmup)</title>
+    <title>KFZW_UM - Ignition Offset (Warmup)</title>
     <category>Датчики/Коррекции</category>
     <description>Ignition angle offset for warm-up (engine temp correction)</description>
     <XDFAXIS id="x" uniqueid="0xA008" />
     <EMBEDDEDDATA datatype="INT16" rows="1" cols="10" address="0x16200" endian="lohi" />
     <conversion units="°">value * 0.023 - 64.0</conversion>
   </XDFTABLE>
-    <!-- Вспомогательные карты -->
+
+  <!-- Вспомогательные карты -->
   <XDFTABLE uniqueid="0xB701" flags="0x0">
-    <title>KFTVSA – Cat Heating Ignition Retard</title>
+    <title>KFTVSA - Cat Heating Ignition Retard</title>
     <category>Вспомогательные карты</category>
     <description>Ignition timing retard for catalyst warmup post-start</description>
     <XDFAXIS id="y" uniqueid="0xA008" />
@@ -477,7 +383,7 @@
     <conversion units="°">value * 0.023 - 64.0</conversion>
   </XDFTABLE>
   <XDFTABLE uniqueid="0xB702" flags="0x0">
-    <title>KFNWS – VVT Cam Angle Map</title>
+    <title>KFNWS - VVT Cam Angle Map</title>
     <category>Вспомогательные карты</category>
     <description>Intake camshaft timing map (angle vs RPM/Load)</description>
     <XDFAXIS id="y" uniqueid="0xA001" />
@@ -486,7 +392,7 @@
     <conversion units="°KW">value * 0.023</conversion>
   </XDFTABLE>
   <XDFTABLE uniqueid="0xB703" flags="0x0">
-    <title>MSLUB – SAI Expected Air Mass</title>
+    <title>MSLUB - SAI Expected Air Mass</title>
     <category>Вспомогательные карты</category>
     <description>Secondary Air Injection expected MAF increase (8x1)</description>
     <XDFAXIS id="x" uniqueid="0xA001" />
@@ -496,7 +402,7 @@
 
   <!-- Константы -->
   <XDFSCALAR uniqueid="0xC001" flags="0x0">
-    <title>KRKTE – Fuel Injector Constant</title>
+    <title>KRKTE - Fuel Injector Constant</title>
     <category>Константы</category>
     <description>Base injector throughput constant (fuel mass per injection)</description>
     <address>0x18B77</address>
@@ -504,7 +410,7 @@
     <conversion units="mg/stroke">value * 0.001</conversion>
   </XDFSCALAR>
   <XDFSCALAR uniqueid="0xC002" flags="0x0">
-    <title>TEMIN – Minimum Injection Time</title>
+    <title>TEMIN - Minimum Injection Time</title>
     <category>Константы</category>
     <description>Minimum injector on-time (fuel pulse width floor)</description>
     <address>0x1362C</address>
@@ -512,7 +418,7 @@
     <conversion units="ms">value * 0.001</conversion>
   </XDFSCALAR>
   <XDFSCALAR uniqueid="0xC003" flags="0x0">
-    <title>MLOFS – Load Offset</title>
+    <title>MLOFS - Load Offset</title>
     <category>Константы</category>
     <description>Offset for load calculation (model calibration)</description>
     <address>0x133E8</address>
@@ -520,7 +426,7 @@
     <conversion units="%">value * 0.001</conversion>
   </XDFSCALAR>
   <XDFSCALAR uniqueid="0xC004" flags="0x0">
-    <title>KVB – Fuel Evaporation Constant</title>
+    <title>KVB - Fuel Evaporation Constant</title>
     <category>Константы</category>
     <description>Fuel volatility constant for transient fuel (wall wetting)</description>
     <address>0x18A2C</address>
@@ -528,7 +434,7 @@
     <conversion>value * 1.0</conversion>
   </XDFSCALAR>
   <XDFSCALAR uniqueid="0xC005" flags="0x0">
-    <title>VFZF – Crankshaft Teeth</title>
+    <title>VFZF - Crankshaft Teeth</title>
     <category>Константы</category>
     <description>Number of flywheel teeth for RPM calculation</description>
     <address>0x18050</address>
@@ -536,145 +442,65 @@
     <conversion>value</conversion>
   </XDFSCALAR>
 
-  <!-- Редкие/Глубокие -->
-  <XDFSCALAR uniqueid="0xD001" flags="0x0">
-    <title>CWMDAPP – Torque Monitoring Enable</title>
-    <category>Редкие/Глубокие</category>
-    <description>Master switch for torque monitoring (set to 0 to disable limp mode)</description>
-    <address>0x11C5B</address>
-    <datatype>UINT8</datatype>
-    <conversion>value</conversion>
-  </XDFSCALAR>
-  <XDFSCALAR uniqueid="0xD002" flags="0x0">
-    <title>CWNMAXMD – Rev Limiter Mode</title>
-    <category>Редкие/Глубокие</category>
-    <description>Rev limit mode selector (fuel cut/ign cut)</description>
-    <address>0x16300</address>
-    <datatype>UINT8</datatype>
-    <conversion>value</conversion>
-  </XDFSCALAR>
-  <XDFSCALAR uniqueid="0xD003" flags="0x0">
-    <title>CDTES – EVAP Purge Diagnosis</title>
-    <category>Экология/Диагностика</category>
-    <description>EVAP purge system diagnostic enable (0=disabled)</description>
-    <address>0x181A6</address>
-    <datatype>UINT8</datatype>
-    <conversion>value</conversion>
-  </XDFSCALAR>
-  <XDFSCALAR uniqueid="0xD004" flags="0x0">
-    <title>CWKONLS – O2 Readiness Setting</title>
-    <category>Экология/Диагностика</category>
-    <description>Codeword for O2 sensor readiness (skip tests if 0)</description>
-    <address>0x18667</address>
-    <datatype>UINT8</datatype>
-    <conversion>value</conversion>
-  </XDFSCALAR>
-  <XDFSCALAR uniqueid="0xD005" flags="0x0">
-    <title>EGR Switch (Not used)</title>
-    <category>Экология/Диагностика</category>
-    <description>EGR system enable/disable (ME7.5 petrol usually no EGR)</description>
-    <address>0xFFFF</address>
-    <datatype>UINT8</datatype>
-    <conversion>value</conversion>
-  </XDFSCALAR>
-
   <!-- Экология/Диагностика -->
   <XDFTABLE uniqueid="0xB601" flags="0x0">
-    <title>ESKONF – Equipment Configuration</title>
+    <title>ESKONF - Equipment Configuration</title>
     <category>Экология/Диагностика</category>
     <description>Component presence coding (bit flags for SAI, EVAP, rear O2, etc.)</description>
     <EMBEDDEDDATA datatype="HEX" rows="1" cols="2" address="0x1866C" />
     <conversion>value</conversion>
   </XDFTABLE>
   <XDFTABLE uniqueid="0xB602" flags="0x0">
-    <title>CDKAT – Catalyst Diagnosis Enable</title>
+    <title>CDKAT - Catalyst Diagnosis Enable</title>
     <category>Экология/Диагностика</category>
     <description>Enable/disable catalyst efficiency monitor (0 = off)</description>
     <EMBEDDEDDATA datatype="UINT8" rows="1" cols="1" address="0x181A3" />
     <conversion>value</conversion>
   </XDFTABLE>
   <XDFTABLE uniqueid="0xB603" flags="0x0">
-    <title>CDHSH / CDHSHE – O2 Heater Diagnosis</title>
+    <title>CDHSH / CDHSHE - O2 Heater Diagnosis</title>
     <category>Экология/Диагностика</category>
-    <description>Oxygen sensor heater diagnosis enable (Bank1 Sensor1 & Sensor2)</description>
+    <description>Oxygen sensor heater diagnosis enable (Bank1 Sensor1 &amp; Sensor2)</description>
     <EMBEDDEDDATA datatype="UINT8" rows="1" cols="2" address="0x1819E" />
     <conversion>value</conversion>
   </XDFTABLE>
   <XDFTABLE uniqueid="0xB604" flags="0x0">
-    <title>CDLASH / CDLSH – O2 Sensor Diagnosis</title>
+    <title>CDLASH / CDLSH - O2 Sensor Diagnosis</title>
     <category>Экология/Диагностика</category>
     <description>Main lambda sensor diagnosis enable (aging, response, etc.)</description>
     <EMBEDDEDDATA datatype="UINT8" rows="1" cols="2" address="0x181A5" />
     <conversion>value</conversion>
   </XDFTABLE>
   <XDFTABLE uniqueid="0xB605" flags="0x0">
-    <title>CDKVS – Secondary O2 (Catalyst) Diagnosis</title>
+    <title>CDKVS - Secondary O2 (Catalyst) Diagnosis</title>
     <category>Экология/Диагностика</category>
     <description>Secondary O2 sensor (post-cat) diagnostic enable</description>
     <EMBEDDEDDATA datatype="UINT8" rows="1" cols="1" address="0x181A4" />
     <conversion>value</conversion>
   </XDFTABLE>
   <XDFTABLE uniqueid="0xB606" flags="0x0">
-    <title>CWDLSAHK – Catalyst Heating Afterstart</title>
+    <title>CWDLSAHK - Catalyst Heating Afterstart</title>
     <category>Экология/Диагностика</category>
     <description>Codeword for catalyst heating strategy (after cold start)</description>
     <EMBEDDEDDATA datatype="UINT8" rows="1" cols="1" address="0x18663" />
     <conversion>value</conversion>
   </XDFTABLE>
   <XDFTABLE uniqueid="0xB607" flags="0x0">
-    <title>CWKONABG – SAI/Catalyst Configuration</title>
+    <title>CWKONABG - SAI/Catalyst Configuration</title>
     <category>Экология/Диагностика</category>
     <description>Codeword for exhaust treatment config (secondary air injection, cats)</description>
     <EMBEDDEDDATA datatype="UINT8" rows="1" cols="1" address="0x18665" />
     <conversion>value</conversion>
   </XDFTABLE>
   <XDFTABLE uniqueid="0xB608" flags="0x0">
-    <title>DTC Fault Class Table</title>
+    <title>DTC_Fault_Class_Table</title>
     <category>Экология/Диагностика</category>
-    <description>DTC code class table (each DTC with its fault class & enable bits)</description>
+    <description>DTC code class table (each DTC with its fault class &amp; enable bits)</description>
     <EMBEDDEDDATA datatype="UINT8" rows="1" cols="256" address="0x14254" />
     <conversion>value</conversion>
   </XDFTABLE>
-
-  <!-- Педаль -->
-  <XDFTABLE uniqueid="0xB801" flags="0x0">
-    <title>KFPED – Throttle Pedal Map</title>
-    <category>Педаль</category>
-    <description>Driver pedal position to requested torque conversion (16x8)</description>
-    <XDFAXIS id="y" uniqueid="0xA002" />
-    <XDFAXIS id="x" uniqueid="0xA001" />
-    <EMBEDDEDDATA datatype="UINT16" rows="16" cols="8" address="0x131AE" endian="lohi" />
-    <conversion units="% Load">value * 0.003052</conversion>
-  </XDFTABLE>
-
-  <!-- Скорость/Обороты -->
-  <XDFTABLE uniqueid="0xB901" flags="0x0">
-    <title>VMAX – Speed Limiter</title>
-    <category>Скорость/Обороты</category>
-    <description>Maximum vehicle speed limiter (if applicable)</description>
-    <EMBEDDEDDATA datatype="UINT8" rows="1" cols="1" address="0x1847A" endian="lohi" />
-    <conversion units="km/h">value</conversion>
-  </XDFTABLE>
-
-  <!-- Редкие/Глубокие (включая Signature Zone) -->
-  <XDFSCALAR uniqueid="0xD001" flags="0x0">
-    <title>CWMDAPP – Torque Monitoring Enable</title>
-    <category>Редкие/Глубокие</category>
-    <description>Master switch for torque monitoring (set to 0 to disable limp mode)</description>
-    <address>0x11C5B</address>
-    <datatype>UINT8</datatype>
-    <conversion>value</conversion>
-  </XDFSCALAR>
-  <XDFSCALAR uniqueid="0xD002" flags="0x0">
-    <title>CWNMAXMD – Rev Limiter Mode</title>
-    <category>Редкие/Глубокие</category>
-    <description>Rev limit mode selector (fuel cut/ign cut)</description>
-    <address>0x16300</address>
-    <datatype>UINT8</datatype>
-    <conversion>value</conversion>
-  </XDFSCALAR>
   <XDFSCALAR uniqueid="0xD003" flags="0x0">
-    <title>CDTES – EVAP Purge Diagnosis</title>
+    <title>CDTES - EVAP Purge Diagnosis</title>
     <category>Экология/Диагностика</category>
     <description>EVAP purge system diagnostic enable (0=disabled)</description>
     <address>0x181A6</address>
@@ -682,7 +508,7 @@
     <conversion>value</conversion>
   </XDFSCALAR>
   <XDFSCALAR uniqueid="0xD004" flags="0x0">
-    <title>CWKONLS – O2 Readiness Setting</title>
+    <title>CWKONLS - O2 Readiness Setting</title>
     <category>Экология/Диагностика</category>
     <description>Codeword for O2 sensor readiness (skip tests if 0)</description>
     <address>0x18667</address>
@@ -690,258 +516,42 @@
     <conversion>value</conversion>
   </XDFSCALAR>
   <XDFSCALAR uniqueid="0xD005" flags="0x0">
-    <title>EGR Switch (Not used)</title>
+    <title>EGR_Switch_Not_used</title>
     <category>Экология/Диагностика</category>
     <description>EGR system enable/disable (ME7.5 petrol usually no EGR)</description>
     <address>0xFFFF</address>
     <datatype>UINT8</datatype>
     <conversion>value</conversion>
   </XDFSCALAR>
+
+  <!-- Редкие/Глубокие -->
+  <XDFSCALAR uniqueid="0xD001" flags="0x0">
+    <title>CWMDAPP - Torque Monitoring Enable</title>
+    <category>Редкие/Глубокие</category>
+    <description>Master switch for torque monitoring (set to 0 to disable limp mode)</description>
+    <address>0x11C5B</address>
+    <datatype>UINT8</datatype>
+    <conversion>value</conversion>
+  </XDFSCALAR>
+  <XDFSCALAR uniqueid="0xD002" flags="0x0">
+    <title>CWNMAXMD - Rev Limiter Mode</title>
+    <category>Редкие/Глубокие</category>
+    <description>Rev limit mode selector (fuel cut/ign cut)</description>
+    <address>0x16300</address>
+    <datatype>UINT8</datatype>
+    <conversion>value</conversion>
+  </XDFSCALAR>
   <XDFTABLE uniqueid="0xB801" flags="0x0">
-    <title>Signature Zone – Mark Area</title>
+    <title>Signature_Zone_Mark_Area</title>
     <category>Редкие/Глубокие</category>
     <description>Raw byte zone for signature or mark (32 bytes)</description>
     <EMBEDDEDDATA datatype="HEX" rows="1" cols="32" address="0x18140" />
     <conversion>value</conversion>
   </XDFTABLE>
-    <!-- Экология/Диагностика -->
-  <XDFTABLE uniqueid="0xB601" flags="0x0">
-    <title>ESKONF – Equipment Configuration</title>
-    <category>Экология/Диагностика</category>
-    <description>Component presence coding (bit flags for SAI, EVAP, rear O2, etc.)</description>
-    <EMBEDDEDDATA datatype="HEX" rows="1" cols="2" address="0x1866C" />
-    <conversion>value</conversion>
-  </XDFTABLE>
-  <XDFTABLE uniqueid="0xB602" flags="0x0">
-    <title>CDKAT – Catalyst Diagnosis Enable</title>
-    <category>Экология/Диагностика</category>
-    <description>Enable/disable catalyst efficiency monitor (0 = off)</description>
-    <EMBEDDEDDATA datatype="UINT8" rows="1" cols="1" address="0x181A3" />
-    <conversion>value</conversion>
-  </XDFTABLE>
-  <XDFTABLE uniqueid="0xB603" flags="0x0">
-    <title>CDHSH / CDHSHE – O2 Heater Diagnosis</title>
-    <category>Экология/Диагностика</category>
-    <description>Oxygen sensor heater diagnosis enable (Bank1 Sensor1 & Sensor2)</description>
-    <EMBEDDEDDATA datatype="UINT8" rows="1" cols="2" address="0x1819E" />
-    <conversion>value</conversion>
-  </XDFTABLE>
-  <XDFTABLE uniqueid="0xB604" flags="0x0">
-    <title>CDLASH / CDLSH – O2 Sensor Diagnosis</title>
-    <category>Экология/Диагностика</category>
-    <description>Main lambda sensor diagnosis enable (aging, response, etc.)</description>
-    <EMBEDDEDDATA datatype="UINT8" rows="1" cols="2" address="0x181A5" />
-    <conversion>value</conversion>
-  </XDFTABLE>
-  <XDFTABLE uniqueid="0xB605" flags="0x0">
-    <title>CDKVS – Secondary O2 (Catalyst) Diagnosis</title>
-    <category>Экология/Диагностика</category>
-    <description>Secondary O2 sensor (post-cat) diagnostic enable</description>
-    <EMBEDDEDDATA datatype="UINT8" rows="1" cols="1" address="0x181A4" />
-    <conversion>value</conversion>
-  </XDFTABLE>
-  <XDFTABLE uniqueid="0xB606" flags="0x0">
-    <title>CWDLSAHK – Catalyst Heating Afterstart</title>
-    <category>Экология/Диагностика</category>
-    <description>Codeword for catalyst heating strategy (after cold start)</description>
-    <EMBEDDEDDATA datatype="UINT8" rows="1" cols="1" address="0x18663" />
-    <conversion>value</conversion>
-  </XDFTABLE>
-  <XDFTABLE uniqueid="0xB607" flags="0x0">
-    <title>CWKONABG – SAI/Catalyst Configuration</title>
-    <category>Экология/Диагностика</category>
-    <description>Codeword for exhaust treatment config (secondary air injection, cats)</description>
-    <EMBEDDEDDATA datatype="UINT8" rows="1" cols="1" address="0x18665" />
-    <conversion>value</conversion>
-  </XDFTABLE>
-  <XDFTABLE uniqueid="0xB608" flags="0x0">
-    <title>DTC Fault Class Table</title>
-    <category>Экология/Диагностика</category>
-    <description>DTC code class table (each DTC with its fault class & enable bits)</description>
-    <EMBEDDEDDATA datatype="UINT8" rows="1" cols="256" address="0x14254" />
-    <conversion>value</conversion>
-  </XDFTABLE>
 
   <!-- Педаль -->
-  <XDFTABLE uniqueid="0xB801" flags="0x0">
-    <title>KFPED – Throttle Pedal Map</title>
-    <category>Педаль</category>
-    <description>Driver pedal position to requested torque conversion (16x8)</description>
-    <XDFAXIS id="y" uniqueid="0xA002" />
-    <XDFAXIS id="x" uniqueid="0xA001" />
-    <EMBEDDEDDATA datatype="UINT16" rows="16" cols="8" address="0x131AE" endian="lohi" />
-    <conversion units="% Load">value * 0.003052</conversion>
-  </XDFTABLE>
-
-  <!-- Скорость/Обороты -->
-  <XDFTABLE uniqueid="0xB901" flags="0x0">
-    <title>VMAX – Speed Limiter</title>
-    <category>Скорость/Обороты</category>
-    <description>Maximum vehicle speed limiter (if applicable)</description>
-    <EMBEDDEDDATA datatype="UINT8" rows="1" cols="1" address="0x1847A" endian="lohi" />
-    <conversion units="km/h">value</conversion>
-  </XDFTABLE>
-
-  <!-- Signature Zone -->
   <XDFTABLE uniqueid="0xB802" flags="0x0">
-    <title>Signature Zone – Mark Area</title>
-    <category>Редкие/Глубокие</category>
-    <description>Raw byte zone for signature or mark (32 bytes)</description>
-    <EMBEDDEDDATA datatype="HEX" rows="1" cols="32" address="0x18140" />
-    <conversion>value</conversion>
-  </XDFTABLE>
-    <!-- Константы -->
-  <XDFSCALAR uniqueid="0xC001" flags="0x0">
-    <title>KRKTE – Fuel Injector Constant</title>
-    <category>Константы</category>
-    <description>Base injector throughput constant (fuel mass per injection)</description>
-    <address>0x18B77</address>
-    <datatype>FLOAT16</datatype>
-    <conversion units="mg/stroke">value * 0.001</conversion>
-  </XDFSCALAR>
-  <XDFSCALAR uniqueid="0xC002" flags="0x0">
-    <title>TEMIN – Minimum Injection Time</title>
-    <category>Константы</category>
-    <description>Minimum injector on-time (fuel pulse width floor)</description>
-    <address>0x1362C</address>
-    <datatype>UINT16</datatype>
-    <conversion units="ms">value * 0.001</conversion>
-  </XDFSCALAR>
-  <XDFSCALAR uniqueid="0xC003" flags="0x0">
-    <title>MLOFS – Load Offset</title>
-    <category>Константы</category>
-    <description>Offset for load calculation (model calibration)</description>
-    <address>0x133E8</address>
-    <datatype>UINT16</datatype>
-    <conversion units="%">value * 0.001</conversion>
-  </XDFSCALAR>
-  <XDFSCALAR uniqueid="0xC004" flags="0x0">
-    <title>KVB – Fuel Evaporation Constant</title>
-    <category>Константы</category>
-    <description>Fuel volatility constant for transient fuel (wall wetting)</description>
-    <address>0x18A2C</address>
-    <datatype>FLOAT16</datatype>
-    <conversion>value * 1.0</conversion>
-  </XDFSCALAR>
-  <XDFSCALAR uniqueid="0xC005" flags="0x0">
-    <title>VFZF – Crankshaft Teeth</title>
-    <category>Константы</category>
-    <description>Number of flywheel teeth for RPM calculation</description>
-    <address>0x18050</address>
-    <datatype>UINT8</datatype>
-    <conversion>value</conversion>
-  </XDFSCALAR>
-
-  <!-- Редкие/Глубокие -->
-  <XDFSCALAR uniqueid="0xD001" flags="0x0">
-    <title>CWMDAPP – Torque Monitoring Enable</title>
-    <category>Редкие/Глубокие</category>
-    <description>Master switch for torque monitoring (set to 0 to disable limp mode)</description>
-    <address>0x11C5B</address>
-    <datatype>UINT8</datatype>
-    <conversion>value</conversion>
-  </XDFSCALAR>
-  <XDFSCALAR uniqueid="0xD002" flags="0x0">
-    <title>CWNMAXMD – Rev Limiter Mode</title>
-    <category>Редкие/Глубокие</category>
-    <description>Rev limit mode selector (fuel cut/ign cut)</description>
-    <address>0x16300</address>
-    <datatype>UINT8</datatype>
-    <conversion>value</conversion>
-  </XDFSCALAR>
-  <XDFSCALAR uniqueid="0xD003" flags="0x0">
-    <title>CDTES – EVAP Purge Diagnosis</title>
-    <category>Экология/Диагностика</category>
-    <description>EVAP purge system diagnostic enable (0=disabled)</description>
-    <address>0x181A6</address>
-    <datatype>UINT8</datatype>
-    <conversion>value</conversion>
-  </XDFSCALAR>
-  <XDFSCALAR uniqueid="0xD004" flags="0x0">
-    <title>CWKONLS – O2 Readiness Setting</title>
-    <category>Экология/Диагностика</category>
-    <description>Codeword for O2 sensor readiness (skip tests if 0)</description>
-    <address>0x18667</address>
-    <datatype>UINT8</datatype>
-    <conversion>value</conversion>
-  </XDFSCALAR>
-  <XDFSCALAR uniqueid="0xD005" flags="0x0">
-    <title>EGR Switch (Not used)</title>
-    <category>Экология/Диагностика</category>
-    <description>EGR system enable/disable (ME7.5 petrol usually no EGR)</description>
-    <address>0xFFFF</address>
-    <datatype>UINT8</datatype>
-    <conversion>value</conversion>
-  </XDFSCALAR>
-  <XDFTABLE uniqueid="0xB801" flags="0x0">
-    <title>Signature Zone – Mark Area</title>
-    <category>Редкие/Глубокие</category>
-    <description>Raw byte zone for signature or mark (32 bytes)</description>
-    <EMBEDDEDDATA datatype="HEX" rows="1" cols="32" address="0x18140" />
-    <conversion>value</conversion>
-  </XDFTABLE>
-
-  <!-- Экология/Диагностика -->
-  <XDFTABLE uniqueid="0xB601" flags="0x0">
-    <title>ESKONF – Equipment Configuration</title>
-    <category>Экология/Диагностика</category>
-    <description>Component presence coding (bit flags for SAI, EVAP, rear O2, etc.)</description>
-    <EMBEDDEDDATA datatype="HEX" rows="1" cols="2" address="0x1866C" />
-    <conversion>value</conversion>
-  </XDFTABLE>
-  <XDFTABLE uniqueid="0xB602" flags="0x0">
-    <title>CDKAT – Catalyst Diagnosis Enable</title>
-    <category>Экология/Диагностика</category>
-    <description>Enable/disable catalyst efficiency monitor (0 = off)</description>
-    <EMBEDDEDDATA datatype="UINT8" rows="1" cols="1" address="0x181A3" />
-    <conversion>value</conversion>
-  </XDFTABLE>
-  <XDFTABLE uniqueid="0xB603" flags="0x0">
-    <title>CDHSH / CDHSHE – O2 Heater Diagnosis</title>
-    <category>Экология/Диагностика</category>
-    <description>Oxygen sensor heater diagnosis enable (Bank1 Sensor1 & Sensor2)</description>
-    <EMBEDDEDDATA datatype="UINT8" rows="1" cols="2" address="0x1819E" />
-    <conversion>value</conversion>
-  </XDFTABLE>
-  <XDFTABLE uniqueid="0xB604" flags="0x0">
-    <title>CDLASH / CDLSH – O2 Sensor Diagnosis</title>
-    <category>Экология/Диагностика</category>
-    <description>Main lambda sensor diagnosis enable (aging, response, etc.)</description>
-    <EMBEDDEDDATA datatype="UINT8" rows="1" cols="2" address="0x181A5" />
-    <conversion>value</conversion>
-  </XDFTABLE>
-  <XDFTABLE uniqueid="0xB605" flags="0x0">
-    <title>CDKVS – Secondary O2 (Catalyst) Diagnosis</title>
-    <category>Экология/Диагностика</category>
-    <description>Secondary O2 sensor (post-cat) diagnostic enable</description>
-    <EMBEDDEDDATA datatype="UINT8" rows="1" cols="1" address="0x181A4" />
-    <conversion>value</conversion>
-  </XDFTABLE>
-  <XDFTABLE uniqueid="0xB606" flags="0x0">
-    <title>CWDLSAHK – Catalyst Heating Afterstart</title>
-    <category>Экология/Диагностика</category>
-    <description>Codeword for catalyst heating strategy (after cold start)</description>
-    <EMBEDDEDDATA datatype="UINT8" rows="1" cols="1" address="0x18663" />
-    <conversion>value</conversion>
-  </XDFTABLE>
-  <XDFTABLE uniqueid="0xB607" flags="0x0">
-    <title>CWKONABG – SAI/Catalyst Configuration</title>
-    <category>Экология/Диагностика</category>
-    <description>Codeword for exhaust treatment config (secondary air injection, cats)</description>
-    <EMBEDDEDDATA datatype="UINT8" rows="1" cols="1" address="0x18665" />
-    <conversion>value</conversion>
-  </XDFTABLE>
-  <XDFTABLE uniqueid="0xB608" flags="0x0">
-    <title>DTC Fault Class Table</title>
-    <category>Экология/Диагностика</category>
-    <description>DTC code class table (each DTC with its fault class & enable bits)</description>
-    <EMBEDDEDDATA datatype="UINT8" rows="1" cols="256" address="0x14254" />
-    <conversion>value</conversion>
-  </XDFTABLE>
-
-  <!-- Педаль -->
-  <XDFTABLE uniqueid="0xB801" flags="0x0">
-    <title>KFPED – Throttle Pedal Map</title>
+    <title>KFPED_Pedal - Throttle Pedal Map</title>
     <category>Педаль</category>
     <description>Driver pedal position to requested torque conversion (16x8)</description>
     <XDFAXIS id="y" uniqueid="0xA002" />
@@ -952,56 +562,11 @@
 
   <!-- Скорость/Обороты -->
   <XDFTABLE uniqueid="0xB901" flags="0x0">
-    <title>VMAX – Speed Limiter</title>
+    <title>VMAX_Speed - Speed Limiter</title>
     <category>Скорость/Обороты</category>
     <description>Maximum vehicle speed limiter (if applicable)</description>
     <EMBEDDEDDATA datatype="UINT8" rows="1" cols="1" address="0x1847A" endian="lohi" />
     <conversion units="km/h">value</conversion>
   </XDFTABLE>
 
-  <!-- Редкие/Глубокие -->
-  <XDFSCALAR uniqueid="0xD001" flags="0x0">
-    <title>CWMDAPP – Torque Monitoring Enable</title>
-    <category>Редкие/Глубокие</category>
-    <description>Master switch for torque monitoring (set to 0 to disable limp mode)</description>
-    <address>0x11C5B</address>
-    <datatype>UINT8</datatype>
-    <conversion>value</conversion>
-  </XDFSCALAR>
-  <XDFSCALAR uniqueid="0xD002" flags="0x0">
-    <title>CWNMAXMD – Rev Limiter Mode</title>
-    <category>Редкие/Глубокие</category>
-    <description>Rev limit mode selector (fuel cut/ign cut)</description>
-    <address>0x16300</address>
-    <datatype>UINT8</datatype>
-    <conversion>value</conversion>
-  </XDFSCALAR>
-  <XDFSCALAR uniqueid="0xD003" flags="0x0">
-    <title>CDTES – EVAP Purge Diagnosis</title>
-    <category>Экология/Диагностика</category>
-    <description>EVAP purge system diagnostic enable (0=disabled)</description>
-    <address>0x181A6</address>
-    <datatype>UINT8</datatype>
-    <conversion>value</conversion>
-  </XDFSCALAR>
-  <XDFSCALAR uniqueid="0xD004" flags="0x0">
-    <title>CWKONLS – O2 Readiness Setting</title>
-    <category>Экология/Диагностика</category>
-    <description>Codeword for O2 sensor readiness (skip tests if 0)</description>
-    <address>0x18667</address>
-    <datatype>UINT8</datatype>
-    <conversion>value</conversion>
-  </XDFSCALAR>
-  <XDFSCALAR uniqueid="0xD005" flags="0x0">
-    <title>EGR Switch (Not used)</title>
-    <category>Экология/Диагностика</category>
-    <description>EGR system enable/disable (ME7.5 petrol usually no EGR)</description>
-    <address>0xFFFF</address>
-    <datatype>UINT8</datatype>
-    <conversion>value</conversion>
-  </XDFSCALAR>
-  
 </XDF>
-
-</XDF>
-  

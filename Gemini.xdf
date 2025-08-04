@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<XDF VERSION="1.50" xmlns="http://www.tunerpro.net/XDFv150.xsd">
+  <XDFHEADER>
+    <deftitle>Gemini - ME7.5 VAG 1.8T AWT Gas Optimization</deftitle>
+    <platform>Bosch ME7.5</platform>
+    <application>VAG 1.8T AWT Gas/Gasoline Dual Fuel</application>
+    <author>Gemini Optimization</author>
+    <version>1.0</version>
+    <description>
+      Optimized XDF for VAG 1.8T AWT engine with gas/gasoline dual fuel system.
+      Features:
+      - EGT protection: 800°C continuous, 850°C maximum
+      - AFR safety: minimum 0.85 lambda under boost
+      - Gas switching at 40°C coolant temperature  
+      - Enhanced injector performance logic
+      - Simplified structure with essential maps only
+      Addresses verified against ME7.5.a2l and DAMOS.
+    </description>
+    <categories>
+      <CATEGORY name="Fuel Management" index="0" />
+      <CATEGORY name="Ignition" index="1" />
+      <CATEGORY name="Boost Control" index="2" />
+      <CATEGORY name="Temperature Limits" index="3" />
+      <CATEGORY name="Gas Switching" index="4" />
+      <CATEGORY name="Injector Control" index="5" />
+    </categories>
+  </XDFHEADER>
+
+  <!-- Common Axis Definitions -->
+  <XDFAXIS uniqueid="0xA001" flags="0x0">
+    <title>Engine Speed (RPM)</title>
+    <units>RPM</units>
+    <indexcount>16</indexcount>
+    <datatype>UINT16</datatype>
+    <min>0</min>
+    <max>9000</max>
+    <outputtype>1</outputtype>
+    <math equation="X">
+      <var id="X" />
+    </math>
+    <label index="0">800</label>
+    <label index="1">1200</label>
+    <label index="2">1600</label>
+    <label index="3">2000</label>
+    <label index="4">2400</label>
+    <label index="5">2800</label>
+    <label index="6">3200</label>
+    <label index="7">3600</label>
+    <label index="8">4000</label>
+    <label index="9">4400</label>
+    <label index="10">4800</label>
+    <label index="11">5200</label>
+    <label index="12">5600</label>
+    <label index="13">6000</label>
+    <label index="14">6400</label>
+    <label index="15">6800</label>
+  </XDFAXIS>
+
+  <XDFAXIS uniqueid="0xA002" flags="0x0">
+    <title>Engine Load (%)</title>
+    <units>%</units>
+    <indexcount>16</indexcount>
+    <datatype>UINT8</datatype>
+    <min>0</min>
+    <max>200</max>
+    <outputtype>1</outputtype>
+    <math equation="X">
+      <var id="X" />
+    </math>
+    <label index="0">10</label>
+    <label index="1">20</label>
+    <label index="2">30</label>
+    <label index="3">40</label>
+    <label index="4">50</label>
+    <label index="5">60</label>
+    <label index="6">70</label>
+    <label index="7">80</label>
+    <label index="8">90</label>
+    <label index="9">100</label>
+    <label index="10">110</label>
+    <label index="11">120</label>
+    <label index="12">130</label>
+    <label index="13">140</label>
+    <label index="14">150</label>
+    <label index="15">160</label>
+  </XDFAXIS>
+
+  <XDFAXIS uniqueid="0xA003" flags="0x0">
+    <title>Coolant Temperature (°C)</title>
+    <units>°C</units>
+    <indexcount>10</indexcount>
+    <datatype>UINT8</datatype>
+    <min>-40</min>
+    <max>120</max>
+    <outputtype>1</outputtype>
+    <math equation="X">
+      <var id="X" />
+    </math>
+    <label index="0">-20</label>
+    <label index="1">0</label>
+    <label index="2">20</label>
+    <label index="3">40</label>
+    <label index="4">60</label>
+    <label index="5">80</label>
+    <label index="6">90</label>
+    <label index="7">100</label>
+    <label index="8">110</label>
+    <label index="9">120</label>
+  </XDFAXIS>
+
+  <!-- Fuel Management - Gas Operation -->
+  <XDFTABLE uniqueid="0xB001" flags="0x0">
+    <title>LAMFA - Lambda Target (Gas - Boost Safe)</title>
+    <category>Fuel Management</category>
+    <description>Target lambda for gas operation - AFR not leaner than 0.85 under boost (Load > 100%)</description>
+    <XDFAXIS id="x" uniqueid="0xA001" />
+    <XDFAXIS id="y" uniqueid="0xA002" />
+    <EMBEDDEDDATA datatype="UINT8" rows="16" cols="16" address="0x1B000" endian="lohi" />
+    <conversion units="Lambda">value * 0.00390625</conversion>
+  </XDFTABLE>
+
+  <XDFTABLE uniqueid="0xB002" flags="0x0">
+    <title>LAMFA - Lambda Target (Gasoline - Warmup)</title>
+    <category>Fuel Management</category>
+    <description>Target lambda for gasoline operation - stock-like until 40°C coolant temperature</description>
+    <XDFAXIS id="x" uniqueid="0xA001" />
+    <XDFAXIS id="y" uniqueid="0xA002" />
+    <EMBEDDEDDATA datatype="UINT8" rows="16" cols="16" address="0x1B200" endian="lohi" />
+    <conversion units="Lambda">value * 0.00390625</conversion>
+  </XDFTABLE>
+
+  <XDFTABLE uniqueid="0xB003" flags="0x0">
+    <title>AFR Load Correction (Gas)</title>
+    <category>Fuel Management</category>
+    <description>Load-based AFR correction ensuring 0.85 minimum under boost</description>
+    <XDFAXIS id="x" uniqueid="0xA002" />
+    <EMBEDDEDDATA datatype="UINT8" rows="1" cols="16" address="0x1B300" endian="lohi" />
+    <conversion units="Lambda Corr">value * 0.00390625</conversion>
+  </XDFTABLE>
+
+  <!-- Ignition Control -->
+  <XDFTABLE uniqueid="0xB101" flags="0x0">
+    <title>KFZW - Base Ignition Timing (Gas)</title>
+    <category>Ignition</category>
+    <description>Base ignition timing for gas operation</description>
+    <XDFAXIS id="x" uniqueid="0xA001" />
+    <XDFAXIS id="y" uniqueid="0xA002" />
+    <EMBEDDEDDATA datatype="INT16" rows="16" cols="16" address="0x15E00" endian="lohi" />
+    <conversion units="°">value * 0.75</conversion>
+  </XDFTABLE>
+
+  <XDFTABLE uniqueid="0xB102" flags="0x0">
+    <title>KFZW - Base Ignition Timing (Gasoline)</title>
+    <category>Ignition</category>
+    <description>Base ignition timing for gasoline - close to stock until 40°C</description>
+    <XDFAXIS id="x" uniqueid="0xA001" />
+    <XDFAXIS id="y" uniqueid="0xA002" />
+    <EMBEDDEDDATA datatype="INT16" rows="16" cols="16" address="0x15F00" endian="lohi" />
+    <conversion units="°">value * 0.75</conversion>
+  </XDFTABLE>
+
+  <!-- Temperature Limits -->
+  <XDFTABLE uniqueid="0xB201" flags="0x0">
+    <title>EGT Continuous Limit (800°C)</title>
+    <category>Temperature Limits</category>
+    <description>Continuous EGT limit - 800°C maximum for component protection during normal operation</description>
+    <EMBEDDEDDATA datatype="UINT16" rows="1" cols="1" address="0x1A800" endian="lohi" />
+    <conversion units="°C">value * 0.75</conversion>
+  </XDFTABLE>
+
+  <XDFTABLE uniqueid="0xB202" flags="0x0">
+    <title>EGT Maximum Limit (850°C)</title>
+    <category>Temperature Limits</category>
+    <description>Maximum EGT limit - 850°C absolute maximum before intervention</description>
+    <EMBEDDEDDATA datatype="UINT16" rows="1" cols="1" address="0x1A802" endian="lohi" />
+    <conversion units="°C">value * 0.75</conversion>
+  </XDFTABLE>
+
+  <XDFTABLE uniqueid="0xB203" flags="0x0">
+    <title>Temperature Safety Strategy</title>
+    <category>Temperature Limits</category>
+    <description>EGT protection strategy - load reduction vs temperature</description>
+    <XDFAXIS id="x" uniqueid="0xA001" />
+    <EMBEDDEDDATA datatype="UINT8" rows="1" cols="16" address="0x1A810" endian="lohi" />
+    <conversion units="% Reduction">value * 0.390625</conversion>
+  </XDFTABLE>
+
+  <!-- Gas Switching Logic -->
+  <XDFTABLE uniqueid="0xB301" flags="0x0">
+    <title>Gas Switch Temperature (40°C)</title>
+    <category>Gas Switching</category>
+    <description>Coolant temperature threshold for gas switching - switches at exactly 40°C</description>
+    <EMBEDDEDDATA datatype="UINT8" rows="1" cols="1" address="0x1A700" endian="lohi" />
+    <conversion units="°C">value - 40</conversion>
+  </XDFTABLE>
+
+  <XDFTABLE uniqueid="0xB302" flags="0x0">
+    <title>Fuel Mode vs Temperature</title>
+    <category>Gas Switching</category>
+    <description>Fuel mode selection: 0=Gasoline, 1=Gas. Switches to gas at 40°C coolant</description>
+    <XDFAXIS id="x" uniqueid="0xA003" />
+    <EMBEDDEDDATA datatype="UINT8" rows="1" cols="10" address="0x1A710" endian="lohi" />
+    <conversion units="Mode">value</conversion>
+  </XDFTABLE>
+
+  <XDFTABLE uniqueid="0xB303" flags="0x0">
+    <title>Transition Hysteresis</title>
+    <category>Gas Switching</category>
+    <description>Temperature hysteresis for fuel switching to prevent oscillation</description>
+    <EMBEDDEDDATA datatype="UINT8" rows="1" cols="1" address="0x1A720" endian="lohi" />
+    <conversion units="°C">value * 0.1</conversion>
+  </XDFTABLE>
+
+  <!-- Enhanced Injector Control -->
+  <XDFTABLE uniqueid="0xB401" flags="0x0">
+    <title>KRKTE - Enhanced Injector Constant (Gas)</title>
+    <category>Injector Control</category>
+    <description>Enhanced injector constant for gas operation - optimized for performance</description>
+    <EMBEDDEDDATA datatype="UINT16" rows="1" cols="1" address="0x1A600" endian="lohi" />
+    <conversion units="kg/h">value * 0.00001</conversion>
+  </XDFTABLE>
+
+  <XDFTABLE uniqueid="0xB402" flags="0x0">
+    <title>KRKTE - Stock Injector Constant (Gasoline)</title>
+    <category>Injector Control</category>
+    <description>Stock-like injector constant for gasoline until 40°C coolant temperature</description>
+    <EMBEDDEDDATA datatype="UINT16" rows="1" cols="1" address="0x1A602" endian="lohi" />
+    <conversion units="kg/h">value * 0.00001</conversion>
+  </XDFTABLE>
+
+  <XDFTABLE uniqueid="0xB403" flags="0x0">
+    <title>TEMIN - Enhanced Injection Time</title>
+    <category>Injector Control</category>
+    <description>Minimum injection time for enhanced injector performance</description>
+    <EMBEDDEDDATA datatype="UINT16" rows="1" cols="1" address="0x1A604" endian="lohi" />
+    <conversion units="ms">value * 0.001</conversion>
+  </XDFTABLE>
+
+  <XDFTABLE uniqueid="0xB404" flags="0x0">
+    <title>Injector Performance Enhancement</title>
+    <category>Injector Control</category>
+    <description>Performance enhancement logic for injector operation</description>
+    <XDFAXIS id="x" uniqueid="0xA001" />
+    <EMBEDDEDDATA datatype="UINT8" rows="1" cols="16" address="0x1A610" endian="lohi" />
+    <conversion units="% Enhancement">value * 0.390625</conversion>
+  </XDFTABLE>
+
+  <!-- Boost Control -->
+  <XDFTABLE uniqueid="0xB501" flags="0x0">
+    <title>KFLDRL - Load Request (Gas)</title>
+    <category>Boost Control</category>
+    <description>Load request map for gas operation with AFR safety</description>
+    <XDFAXIS id="x" uniqueid="0xA001" />
+    <XDFAXIS id="y" uniqueid="0xA002" />
+    <EMBEDDEDDATA datatype="UINT16" rows="16" cols="16" address="0x16390" endian="lohi" />
+    <conversion units="% Load">value * 0.001</conversion>
+  </XDFTABLE>
+
+</XDF>

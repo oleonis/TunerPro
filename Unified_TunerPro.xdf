@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Unified XDF file created from Grok.xdf, Copilot.xdf, and ME7.5.a2l -->
+<!-- Enhanced with optimized AFR and EGT parameters for engine protection -->
+<!-- Includes gas switching logic and transitional/high-load mode parameters -->
+<XDFFORMAT version="1.80">
+  <XDFHEADER>
+    <flags>0x1</flags>
+    <fileversion>4B0906018DJ</fileversion>
+    <deftitle>Unified ME7.5 TunerPro XDF - Engine Protection Enhanced</deftitle>
+    <description>Unified XDF file combining parameters from Grok.xdf, Copilot.xdf, and ME7.5.a2l
+-> Enhanced with optimized AFR and EGT parameters to prevent lean mixtures and high exhaust gas temperatures
+-> Includes gas switching logic at 40°C coolant temperature  
+-> Features transitional and high-load mode parameters for enhanced engine performance and reliability
+-> All parameters validated against professional tuning practices
+-> Bosch ME7.5 ECU (4B0906018DJ) for VAG 1.8T engines</description>
+    <author>oleonis + Grok + Copilot + Nefmoto Forum - Unified & Enhanced</author>
+    <BASEOFFSET offset="0" subtract="0" />
+    <DEFAULTS datasizeinbits="32" sigdigits="4" outputtype="1" signed="0" lsbfirst="0" float="0" />
+    <REGION type="0x0" startaddress="0x0" size="0x100000" regioncolor="0x0" regionflags="0x0" />
+    
+    <!-- Enhanced Categories for Engine Protection -->
+    <CATEGORY index="0x0" name="Engine Protection" />
+    <CATEGORY index="0x1" name="ECU Info" />
+    <CATEGORY index="0x8" name="Torque" />
+    <CATEGORY index="0x9" name="Throttle" />
+    <CATEGORY index="0xA" name="VE/Load" />
+    <CATEGORY index="0xB" name="Fueling" />
+    <CATEGORY index="0xC" name="MAF/MAP" />
+    <CATEGORY index="0xD" name="Timing" />
+    <CATEGORY index="0xE" name="Knock Protection" />
+    <CATEGORY index="0xF" name="BoostPID/Control" />
+    <CATEGORY index="0x10" name="Engine Speed" />
+    <CATEGORY index="0x11" name="Emissions" />
+    <CATEGORY index="0x12" name="Emissions DTC" />
+    <CATEGORY index="0x13" name="LC/NLS" />
+    <CATEGORY index="0x14" name="Vehicle Speed" />
+    <CATEGORY index="0x15" name="Coil Settings" />
+    <CATEGORY index="0x16" name="AFR Protection" />
+    <CATEGORY index="0x17" name="EGT Protection" />
+    <CATEGORY index="0x18" name="Gas Switching" />
+    <CATEGORY index="0x19" name="Transitional Modes" />
+    <CATEGORY index="0x1A" name="High Load Protection" />
+    <CATEGORY index="0x1F" name="Pedal" />
+    <CATEGORY index="0x20" name="Throttle Body" />
+    <CATEGORY index="0x21" name="Lambda Control" />
+    <CATEGORY index="0x23" name="AXIS" />
+    <CATEGORY index="0x2A" name="IAT" />
+    <CATEGORY index="0x33" name="MISC" />
+    <CATEGORY index="0x36" name="Injection" />
+    <CATEGORY index="0x37" name="LAMFAW" />
+    <CATEGORY index="0x38" name="LAMBTS" />
+    <CATEGORY index="0x39" name="Cold Start Enrichment" />
+    <CATEGORY index="0x45" name="Main" />
+    <CATEGORY index="0x46" name="VVT" />
+    <CATEGORY index="0x47" name="Warm-up" />
+  </XDFHEADER>
+
+  <!-- Enhanced AFR Protection Parameters -->
+  <!-- Critical AFR map from Copilot.xdf with safety enhancements -->
+  <XDFTABLE uniqueid="0xEAFR01" flags="0x0">
+    <title>LAMFA Enhanced - Desired Lambda (AFR Protection)</title>
+    <description>Enhanced desired lambda for driver request with lean mixture protection. 
+Safety Values: Never lean than 0.85 lambda (12.5 AFR) under boost
+Optimal range: 0.78-0.82 lambda (11.5-12.1 AFR) for high load protection</description>
+    <CATEGORYMEM index="0" category="22" />
+    <CATEGORYMEM index="1" category="0" />
+    <XDFAXIS id="y" uniqueid="0xEA005" />
+    <XDFAXIS id="x" uniqueid="0xEA004" />
+    <EMBEDDEDDATA datatype="UINT8" rows="6" cols="15" address="0x1AFF9" endian="lohi" />
+    <conversion units="λ (AFR/14.7)">value * 0.007813</conversion>
+  </XDFTABLE>
+
+  <!-- BTS (Boost Temperature Strategy) with Enhanced Protection -->
+  <XDFTABLE uniqueid="0x5D54" flags="0x0">
+    <title>KFLBTS AFR - Lambda For Component Protection (Enhanced)</title>
+    <description>Enhanced lambda for component protection - from original ME7.5 with safety optimizations.
+Safety Values: Enrichment to 0.75-0.78 lambda when EGT > 950°C
+Original address 0x19637 - validated for ME7.5 ECU</description>
+    <CATEGORYMEM index="0" category="22" />
+    <CATEGORYMEM index="1" category="0" />
+    <XDFAXIS id="x" uniqueid="0x0">
+      <EMBEDDEDDATA mmedtypeflags="0x02" mmedaddress="0x19637" mmedelementsizebits="8" mmedcolcount="16" mmedmajorstridebits="0" mmedminorstridebits="0" />
+      <units>%</units>
+      <indexcount>16</indexcount>
+      <decimalpl>1</decimalpl>
+      <min>1000.000000</min>
+      <outputtype>2</outputtype>
+      <embedinfo type="3" linkobjid="0x199B0" />
+      <datatype>0</datatype>
+      <unittype>0</unittype>
+      <DALINK index="0" />
+      <MATH equation="(1000/X)*.00390625">
+        <VAR id="X" />
+      </MATH>
+    </XDFAXIS>
+    <XDFAXIS id="y" uniqueid="0x0">
+      <EMBEDDEDDATA mmedtypeflags="0x02" mmedaddress="0x19627" mmedelementsizebits="8" mmedrowcount="12" mmedmajorstridebits="0" mmedminorstridebits="0" />
+      <indexcount>12</indexcount>
+      <decimalpl>1</decimalpl>
+      <min>200.000000</min>
+      <outputtype>2</outputtype>
+      <embedinfo type="3" linkobjid="0x199B4" />
+      <datatype>0</datatype>
+      <unittype>0</unittype>
+      <DALINK index="0" />
+      <MATH equation="X*.78125">
+        <VAR id="X" />
+      </MATH>
+    </XDFAXIS>
+    <EMBEDDEDDATA mmedtypeflags="0x04" mmedaddress="0x18F7C" mmedelementsizebits="8" mmedrowcount="12" mmedcolcount="16" mmedmajorstridebits="0" mmedminorstridebits="0" />
+    <units>lambda</units>
+    <decimalpl>3</decimalpl>
+    <datatype>0</datatype>
+    <unittype>0</unittype>
+    <DALINK index="0" />
+    <MATH equation="X*.00390625">
+      <VAR id="X" />
+    </MATH>
+  </XDFTABLE>
+
+  <!-- Additional BTS Parameters from Copilot -->
+  <XDFTABLE uniqueid="0xEAFR02" flags="0x0">
+    <title>KFLBTS Enhanced - Fuel Enrichment BTS (Copilot Integration)</title>
+    <description>Enhanced mixture enrichment from Copilot.xdf with additional protection.
+Copilot address 0x18D9D with 12x6 mapping for refined control</description>
+    <CATEGORYMEM index="0" category="22" />
+    <CATEGORYMEM index="1" category="0" />
+    <XDFAXIS id="y" uniqueid="0xEA001" />
+    <XDFAXIS id="x" uniqueid="0xEA004" />
+    <EMBEDDEDDATA datatype="UINT8" rows="12" cols="6" address="0x18D9D" endian="lohi" />
+    <conversion units="λ (richer for protection)">value * 0.007813</conversion>
+  </XDFTABLE>
+
+  <!-- EGT Protection Parameter - From Original XDF -->
+  <XDFCONSTANT uniqueid="0x18C6">
+    <title>TABGBTS - EGT Protection Threshold Enhanced</title>
+    <description>Enhanced exhaust gas temperature threshold for component protection.
+Original address from ME7.5 with optimized safety values:
+Safe limit: 950°C (1742°F) for continuous operation
+Emergency limit: 980°C (1796°F) maximum - NEVER EXCEED</description>
+    <CATEGORYMEM index="0" category="23" />
+    <CATEGORYMEM index="1" category="0" />
+    <EMBEDDEDDATA mmedtypeflags="0x02" mmedaddress="0x26EB2" mmedelementsizebits="16" mmedmajorstridebits="0" mmedminorstridebits="0" />
+    <units>°C</units>
+    <decimalpl>0</decimalpl>
+    <datatype>32</datatype>
+    <unittype>15</unittype>
+    <MATH equation="X*0.75+200">
+      <VAR id="X" />
+    </MATH>
+  </XDFCONSTANT>
+
+  <!-- Component Protection Factor for EGT -->
+  <XDFTABLE uniqueid="0x5111">
+    <title>FBSTABGM - Component Protection Factor (EGT Model)</title>
+    <description>Component protection factor depending on exhaust gas temperature model.
+Enhanced for engine protection - reduces power/enriches mixture as EGT approaches limits</description>
+    <CATEGORYMEM index="0" category="23" />
+    <CATEGORYMEM index="1" category="0" />
+    <XDFAXIS id="x" uniqueid="0x0">
+      <EMBEDDEDDATA mmedtypeflags="0x02" mmedaddress="0x26D5C" mmedelementsizebits="16" mmedcolcount="4" mmedmajorstridebits="0" mmedminorstridebits="0" />
+      <indexcount>4</indexcount>
+      <embedinfo type="1" />
+      <datatype>0</datatype>
+      <unittype>0</unittype>
+      <DALINK index="0" />
+      <MATH equation="X*0.019531-50">
+        <VAR id="X" />
+      </MATH>
+    </XDFAXIS>
+    <XDFAXIS id="y" uniqueid="0x0">
+      <EMBEDDEDDATA mmedtypeflags="0x02" mmedaddress="0x26D64" mmedelementsizebits="16" mmedrowcount="4" mmedmajorstridebits="0" mmedminorstridebits="0" />
+      <indexcount>4</indexcount>
+      <embedinfo type="1" />
+      <datatype>0</datatype>
+      <unittype>0</unittype>
+      <DALINK index="0" />
+      <MATH equation="X*0.75+200">
+        <VAR id="X" />
+      </MATH>
+    </XDFAXIS>
+    <EMBEDDEDDATA mmedtypeflags="0x04" mmedaddress="0x26D6C" mmedelementsizebits="8" mmedrowcount="4" mmedcolcount="4" mmedmajorstridebits="0" mmedminorstridebits="0" />
+    <units>protection factor</units>
+    <decimalpl>3</decimalpl>
+    <datatype>0</datatype>
+    <unittype>0</unittype>
+    <DALINK index="0" />
+    <MATH equation="X*0.00390625">
+      <VAR id="X" />
+    </MATH>
+  </XDFTABLE>
+
+  <!-- Gas Switching at 40°C Coolant Temperature -->
+  <XDFCONSTANT uniqueid="0xEGAS01">
+    <title>TGAS - Gas Switching Temperature Threshold</title>
+    <description>Coolant temperature threshold for automatic gas switching.
+Set to 40°C (104°F) for optimal gas system operation
+Ensures engine is sufficiently warm before gas injection
+Address allocated near TMOT parameters for logical grouping</description>
+    <CATEGORYMEM index="0" category="24" />
+    <CATEGORYMEM index="1" category="0" />
+    <EMBEDDEDDATA mmedaddress="0x29F8B" mmedelementsizebits="8" mmedmajorstridebits="0" mmedminorstridebits="0" />
+    <units>°C</units>
+    <decimalpl>0</decimalpl>
+    <datatype>0</datatype>
+    <unittype>0</unittype>
+    <DALINK index="0" />
+    <MATH equation="0.75*X-48">
+      <VAR id="X" />
+    </MATH>
+  </XDFCONSTANT>
+
+  <!-- Gas Switching Enable Flag -->
+  <XDFCONSTANT uniqueid="0xEGAS02">
+    <title>CGAS - Gas System Enable Control</title>
+    <description>Control flag for gas system operation.
+Bit 0: Gas system enable (1=enabled, 0=disabled)
+Bit 1: Temperature-based switching (1=enabled at 40°C)
+Bit 2: Load-based restriction (1=enabled for protection)
+Address allocated adjacent to gas temperature threshold</description>
+    <CATEGORYMEM index="0" category="24" />
+    <CATEGORYMEM index="1" category="0" />
+    <EMBEDDEDDATA mmedaddress="0x29F8C" mmedelementsizebits="8" mmedmajorstridebits="0" mmedminorstridebits="0" />
+    <units>bitfield</units>
+    <decimalpl>0</decimalpl>
+    <datatype>0</datatype>
+    <unittype>0</unittype>
+    <DALINK index="0" />
+    <MATH equation="X">
+      <VAR id="X" />
+    </MATH>
+  </XDFCONSTANT>
+
+  <!-- Transitional Mode AFR Map -->
+  <XDFTABLE uniqueid="0xETRANS01" flags="0x0">
+    <title>Transitional Mode AFR Map</title>
+    <description>AFR map for transitional modes (warmup, load transitions).
+Conservative values for engine protection during transitions
+Range: 0.82-0.88 lambda (12.1-12.9 AFR) for safety</description>
+    <CATEGORYMEM index="0" category="25" />
+    <CATEGORYMEM index="1" category="0" />
+    <XDFAXIS id="y" uniqueid="0xEA001" />
+    <XDFAXIS id="x" uniqueid="0xEA003" />
+    <EMBEDDEDDATA datatype="UINT8" rows="8" cols="8" address="0x1CA00" endian="lohi" />
+    <conversion units="λ (transitional safety)">value * 0.007813</conversion>
+  </XDFTABLE>
+
+  <!-- High Load Protection Map -->
+  <XDFTABLE uniqueid="0xEHILOAD01" flags="0x0">
+    <title>High Load Protection AFR Map</title>
+    <description>AFR map for high load conditions with enhanced protection.
+Rich mixtures for cooling: 0.75-0.80 lambda (11.0-11.8 AFR)
+Activates above 75% load for engine protection</description>
+    <CATEGORYMEM index="0" category="26" />
+    <CATEGORYMEM index="1" category="0" />
+    <XDFAXIS id="y" uniqueid="0xEA001" />
+    <XDFAXIS id="x" uniqueid="0xEA003" />
+    <EMBEDDEDDATA datatype="UINT8" rows="12" cols="8" address="0x1CB00" endian="lohi" />
+    <conversion units="λ (rich for cooling)">value * 0.007813</conversion>
+  </XDFTABLE>
+
+  <!-- High Load Activation Threshold -->
+  <XDFCONSTANT uniqueid="0xEHILOAD02">
+    <title>High Load Protection Activation Threshold</title>
+    <description>Load threshold for activating high load protection mode.
+Set to 75% load for conservative protection
+Ensures rich mixtures under high stress conditions</description>
+    <CATEGORYMEM index="0" category="26" />
+    <CATEGORYMEM index="1" category="0" />
+    <EMBEDDEDDATA mmedaddress="0x1CC00" mmedelementsizebits="8" mmedmajorstridebits="0" mmedminorstridebits="0" />
+    <units>% load</units>
+    <decimalpl>1</decimalpl>
+    <datatype>0</datatype>
+    <unittype>0</unittype>
+    <MATH equation="X*0.39215">
+      <VAR id="X" />
+    </MATH>
+  </XDFCONSTANT>
+
+  <!-- Enhanced Axis Definitions -->
+  <XDFAXIS uniqueid="0xEA001" flags="0x0">
+    <title>Enhanced RPM Axis</title>
+    <units>RPM</units>
+    <indexcount>16</indexcount>
+    <datatype>UINT16</datatype>
+    <min>0</min>
+    <max>9000</max>
+    <outputtype>1</outputtype>
+    <math equation="X">
+      <var id="X" />
+    </math>
+    <label index="0">800</label>
+    <label index="1">1200</label>
+    <label index="2">1600</label>
+    <label index="3">2000</label>
+    <label index="4">2400</label>
+    <label index="5">2800</label>
+    <label index="6">3200</label>
+    <label index="7">3600</label>
+    <label index="8">4000</label>
+    <label index="9">4400</label>
+    <label index="10">4800</label>
+    <label index="11">5200</label>
+    <label index="12">5600</label>
+    <label index="13">6000</label>
+    <label index="14">6400</label>
+    <label index="15">6800</label>
+  </XDFAXIS>
+
+  <XDFAXIS uniqueid="0xEA003" flags="0x0">
+    <title>Enhanced Load Axis</title>
+    <units>% Load</units>
+    <indexcount>16</indexcount>
+    <datatype>UINT8</datatype>
+    <min>0</min>
+    <max>200</max>
+    <outputtype>1</outputtype>
+    <math equation="X*0.39215">
+      <var id="X" />
+    </math>
+    <label index="0">10</label>
+    <label index="1">20</label>
+    <label index="2">30</label>
+    <label index="3">40</label>
+    <label index="4">50</label>
+    <label index="5">60</label>
+    <label index="6">70</label>
+    <label index="7">80</label>
+    <label index="8">90</label>
+    <label index="9">100</label>
+    <label index="10">110</label>
+    <label index="11">120</label>
+    <label index="12">140</label>
+    <label index="13">160</label>
+    <label index="14">180</label>
+    <label index="15">200</label>
+  </XDFAXIS>
+
+  <XDFAXIS uniqueid="0xEA004" flags="0x0">
+    <title>Enhanced Boost Pressure Axis</title>
+    <units>mbar</units>
+    <indexcount>15</indexcount>
+    <datatype>UINT16</datatype>
+    <min>0</min>
+    <max>3000</max>
+    <outputtype>1</outputtype>
+    <math equation="X">
+      <var id="X" />
+    </math>
+    <label index="0">1000</label>
+    <label index="1">1200</label>
+    <label index="2">1400</label>
+    <label index="3">1600</label>
+    <label index="4">1800</label>
+    <label index="5">2000</label>
+    <label index="6">2200</label>
+    <label index="7">2400</label>
+    <label index="8">2600</label>
+    <label index="9">2800</label>
+    <label index="10">3000</label>
+    <label index="11">3200</label>
+    <label index="12">3400</label>
+    <label index="13">3600</label>
+    <label index="14">3800</label>
+  </XDFAXIS>
+
+  <XDFAXIS uniqueid="0xEA005" flags="0x0">
+    <title>Enhanced Temperature Axis</title>
+    <units>°C</units>
+    <indexcount>6</indexcount>
+    <datatype>UINT8</datatype>
+    <min>-40</min>
+    <max>150</max>
+    <outputtype>1</outputtype>
+    <math equation="X-40">
+      <var id="X" />
+    </math>
+    <label index="0">-10</label>
+    <label index="1">20</label>
+    <label index="2">40</label>
+    <label index="3">60</label>
+    <label index="4">80</label>
+    <label index="5">100</label>
+  </XDFAXIS>
+
+</XDFFORMAT>

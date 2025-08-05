@@ -1,0 +1,2039 @@
+<XDFFORMAT version="1.80">
+  <XDFHEADER>
+    <flags>0x1</flags>
+    <fileversion>1.0</fileversion>
+    <deftitle>ME7.5 VAG 1.8T AWT Tuning XDF</deftitle>
+    <description>Полный XDF для TunerPro, основан на Grok1.xdf и дамос ME7.5.a2l. Под VAG 1.8T AWT на пропан-бутане, форсунки +14.6%, нулевик, даунпайп 76 мм, прямоток 63 мм, буст 0.9 bar. Консервативная настройка: AFR λ=1.0 (низкие), 0.95 (средние), 0.85 (высокие, AFR~12.5); EGT <850°C; зажигание -3° от стока; KRKTE -12.5%; duty <85%. Экология отключена. Патч метки 0x18140–0x1815F (FF). Адреса из Grok1.xdf. HW: 026120xxxx, SW: 8D0xxxx. Оси общие для всех карт (N_AXIS, RL_AXIS, PEDAL_AXIS, TEMP_AXIS, PRESS_AXIS).</description>
+    <author>Grok AI</author>
+    <BASEOFFSET offset="0" subtract="0" />
+    <DEFAULTS datasizeinbits="32" sigdigits="4" outputtype="1" signed="0" lsbfirst="0" float="0" />
+    <REGION type="0x0" startaddress="0x0" size="0x100000" regioncolor="0x0" regionflags="0x0" />
+    <CATEGORY index="0x0" name="Топливо" />
+    <CATEGORY index="0x1" name="Зажигание" />
+    <CATEGORY index="0x2" name="НаддувНагрузка" />
+    <CATEGORY index="0x3" name="ОграниченияЛимитеры" />
+    <CATEGORY index="0x4" name="ДатчикиКоррекции" />
+    <CATEGORY index="0x5" name="ЭкологияДиагностика" />
+    <CATEGORY index="0x6" name="ВспомогательныеКарты" />
+    <CATEGORY index="0x7" name="Оси" />
+    <CATEGORY index="0x8" name="Константы" />
+    <CATEGORY index="0x9" name="РедкиеГлубокие" />
+    <CATEGORY index="0xA" name="ПатчМетки" />
+  </XDFHEADER>
+
+  <!-- Топливо -->
+  <XDFTABLE uniqueid="LAMFA" flags="0x0">
+    <title>LAMFA - Целевая AFR (лямбда) по нагрузке</title>
+    <description>Целевая лямбда по нагрузке и оборотам. Консервативно: λ ~0.95–1.0 для защиты на пропане. Формула: X/1024, тип KwUw, размер 16x12.</description>
+    <CATEGORYMEM index="0" category="0x0" />
+    <XDFAXIS id="x" uniqueid="N_AXIS">
+      <embedinfo type="1" linkobjid="N_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="y" uniqueid="RL_AXIS">
+      <embedinfo type="1" linkobjid="RL_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="z">
+      <EMBEDDEDDATA mmedtypeflags="0x04" mmedaddress="0x800A00" mmedelementsizebits="16" mmedrowmajor="true" mmedcolcount="12" mmedrowcount="16" mmedmajorstridebits="0" mmedminorstridebits="0" mmedelements="192" />
+      <decimalpl>3</decimalpl>
+      <min>0.7</min>
+      <max>1.5</max>
+      <outputtype>1</outputtype>
+      <datatype>1</datatype>
+      <unittype>0</unittype>
+      <DALINK index="0" />
+      <MATH equation="X/1024">
+        <VAR id="X" />
+      </MATH>
+    </XDFAXIS>
+  </XDFTABLE>
+
+  <XDFTABLE uniqueid="KFLBTS" flags="0x0">
+    <title>KFLBTS - Обогащение для защиты по температуре выхлопа (BTS)</title>
+    <description>Обогащение для защиты по температуре выхлопа (BTS). Формула: X/100, тип KwUw, размер 8x1.</description>
+    <CATEGORYMEM index="0" category="0x0" />
+    <XDFAXIS id="x" uniqueid="TEMP_AXIS">
+      <embedinfo type="1" linkobjid="TEMP_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="y" uniqueid="0x0">
+      <EMBEDDEDDATA mmedtypeflags="0x02" mmedelementsizebits="16" mmedmajorstridebits="-32" mmedminorstridebits="0" />
+      <indexcount>1</indexcount>
+      <decimalpl>0</decimalpl>
+      <datatype>0</datatype>
+      <unittype>0</unittype>
+      <DALINK index="0" />
+      <LABEL index="0" value="0.0" />
+      <MATH equation="X">
+        <VAR id="X" />
+      </MATH>
+    </XDFAXIS>
+    <XDFAXIS id="z">
+      <EMBEDDEDDATA mmedtypeflags="0x04" mmedaddress="0x801200" mmedelementsizebits="16" mmedrowmajor="true" mmedcolcount="1" mmedrowcount="8" mmedmajorstridebits="0" mmedminorstridebits="0" mmedelements="8" />
+      <decimalpl>3</decimalpl>
+      <min>0.5</min>
+      <max>1.5</max>
+      <outputtype>1</outputtype>
+      <datatype>1</datatype>
+      <unittype>0</unittype>
+      <DALINK index="0" />
+      <MATH equation="X/100">
+        <VAR id="X" />
+      </MATH>
+    </XDFAXIS>
+  </XDFTABLE>
+
+  <XDFTABLE uniqueid="KFLBTSK" flags="0x0">
+    <title>KFLBTSK - Дополнительная коррекция BTS</title>
+    <description>Дополнительная коррекция BTS для тонкой настройки защиты. Формула: X/100, тип KwUw, размер 8x1.</description>
+    <CATEGORYMEM index="0" category="0x0" />
+    <XDFAXIS id="x" uniqueid="TEMP_AXIS">
+      <embedinfo type="1" linkobjid="TEMP_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="y" uniqueid="0x0">
+      <EMBEDDEDDATA mmedtypeflags="0x02" mmedelementsizebits="16" mmedmajorstridebits="-32" mmedminorstridebits="0" />
+      <indexcount>1</indexcount>
+      <decimalpl>0</decimalpl>
+      <datatype>0</datatype>
+      <unittype>0</unittype>
+      <DALINK index="0" />
+      <LABEL index="0" value="0.0" />
+      <MATH equation="X">
+        <VAR id="X" />
+      </MATH>
+    </XDFAXIS>
+    <XDFAXIS id="z">
+      <EMBEDDEDDATA mmedtypeflags="0x04" mmedaddress="0x801000" mmedelementsizebits="16" mmedrowmajor="true" mmedcolcount="1" mmedrowcount="8" mmedmajorstridebits="0" mmedminorstridebits="0" mmedelements="8" />
+      <decimalpl>3</decimalpl>
+      <min>0.5</min>
+      <max>1.5</max>
+      <outputtype>1</outputtype>
+      <datatype>1</datatype>
+      <unittype>0</unittype>
+      <DALINK index="0" />
+      <MATH equation="X/100">
+        <VAR id="X" />
+      </MATH>
+    </XDFAXIS>
+  </XDFTABLE>
+
+  <XDFTABLE uniqueid="KFLF" flags="0x0">
+    <title>KFLF - Фактор нагрузки (маслоуловитель, нулевик)</title>
+    <description>Фактор нагрузки для нулевика. Формула: X/100, тип KwUw, размер 8x1.</description>
+    <CATEGORYMEM index="0" category="0x0" />
+    <XDFAXIS id="x" uniqueid="N_AXIS">
+      <embedinfo type="1" linkobjid="N_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="y" uniqueid="0x0">
+      <EMBEDDEDDATA mmedtypeflags="0x02" mmedelementsizebits="16" mmedmajorstridebits="-32" mmedminorstridebits="0" />
+      <indexcount>1</indexcount>
+      <decimalpl>0</decimalpl>
+      <datatype>0</datatype>
+      <unittype>0</unittype>
+      <DALINK index="0" />
+      <LABEL index="0" value="0.0" />
+      <MATH equation="X">
+        <VAR id="X" />
+      </MATH>
+    </XDFAXIS>
+    <XDFAXIS id="z">
+      <EMBEDDEDDATA mmedtypeflags="0x04" mmedaddress="0x801100" mmedelementsizebits="16" mmedrowmajor="true" mmedcolcount="1" mmedrowcount="8" mmedmajorstridebits="0" mmedminorstridebits="0" mmedelements="8" />
+      <decimalpl>3</decimalpl>
+      <min>0.5</min>
+      <max>1.5</max>
+      <outputtype>1</outputtype>
+      <datatype>1</datatype>
+      <unittype>0</unittype>
+      <DALINK index="0" />
+      <MATH equation="X/100">
+        <VAR id="X" />
+      </MATH>
+    </XDFAXIS>
+  </XDFTABLE>
+
+  <XDFCONSTANT uniqueid="KRKTE">
+    <title>KRKTE - Коэффициент расчёта топлива (mg/stroke)</title>
+    <description>Коэффициент топлива. Формула: X/1000, тип KwSw.</description>
+    <CATEGORYMEM index="0" category="0x8" />
+    <EMBEDDEDDATA mmedtypeflags="0x02" mmedaddress="0x18B77" mmedelementsizebits="16" mmedmajorstridebits="0" mmedminorstridebits="0" />
+    <decimalpl>3</decimalpl>
+    <min>0</min>
+    <max>10</max>
+    <outputtype>1</outputtype>
+    <datatype>1</datatype>
+    <unittype>0</unittype>
+    <DALINK index="0" />
+    <MATH equation="X/1000">
+      <VAR id="X" />
+    </MATH>
+  </XDFCONSTANT>
+
+  <XDFCONSTANT uniqueid="TVUB">
+    <title>TVUB - Комп. времени открытия форсунки</title>
+    <description>Время открытия форсунки. Формула: X/1000, тип KwSw.</description>
+    <CATEGORYMEM index="0" category="0x8" />
+    <EMBEDDEDDATA mmedtypeflags="0x02" mmedaddress="0x800D00" mmedelementsizebits="16" mmedmajorstridebits="0" mmedminorstridebits="0" />
+    <decimalpl>3</decimalpl>
+    <min>0</min>
+    <max>5</max>
+    <outputtype>1</outputtype>
+    <datatype>1</datatype>
+    <unittype>0</unittype>
+    <DALINK index="0" />
+    <MATH equation="X/1000">
+      <VAR id="X" />
+    </MATH>
+  </XDFCONSTANT>
+
+  <XDFTABLE uniqueid="KFMLDMX">
+    <title>KFMLDMX - Максимальная нагрузка по оборотам</title>
+    <description>Макс нагрузка по оборотам. Формула: X/2, тип KwUw, размер 6x1.</description>
+    <CATEGORYMEM index="0" category="0x0" />
+    <XDFAXIS id="x" uniqueid="N_AXIS">
+      <embedinfo type="1" linkobjid="N_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="y" uniqueid="0x0">
+      <EMBEDDEDDATA mmedtypeflags="0x02" mmedelementsizebits="16" mmedmajorstridebits="-32" mmedminorstridebits="0" />
+      <indexcount>1</indexcount>
+      <decimalpl>0</decimalpl>
+      <datatype>0</datatype>
+      <unittype>0</unittype>
+      <DALINK index="0" />
+      <LABEL index="0" value="0.0" />
+      <MATH equation="X">
+        <VAR id="X" />
+      </MATH>
+    </XDFAXIS>
+    <XDFAXIS id="z">
+      <EMBEDDEDDATA mmedtypeflags="0x04" mmedaddress="0x800E00" mmedelementsizebits="16" mmedrowmajor="true" mmedcolcount="1" mmedrowcount="6" mmedmajorstridebits="0" mmedminorstridebits="0" mmedelements="6" />
+      <decimalpl>1</decimalpl>
+      <min>0</min>
+      <max>200</max>
+      <outputtype>1</outputtype>
+      <datatype>1</datatype>
+      <unittype>0</unittype>
+      <DALINK index="0" />
+      <MATH equation="X/2">
+        <VAR id="X" />
+      </MATH>
+    </XDFAXIS>
+  </XDFTABLE>
+
+  <XDFTABLE uniqueid="KFKHFM">
+    <title>KFKHFM - Калибровка MAF</title>
+    <description>Калибровка MAF. Формула: X/100, тип KwUw, размер 8x1.</description>
+    <CATEGORYMEM index="0" category="0x0" />
+    <XDFAXIS id="x" uniqueid="PRESS_AXIS">
+      <embedinfo type="1" linkobjid="PRESS_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="y" uniqueid="0x0">
+      <EMBEDDEDDATA mmedtypeflags="0x02" mmedelementsizebits="16" mmedmajorstridebits="-32" mmedminorstridebits="0" />
+      <indexcount>1</indexcount>
+      <decimalpl>0</decimalpl>
+      <datatype>0</datatype>
+      <unittype>0</unittype>
+      <DALINK index="0" />
+      <LABEL index="0" value="0.0" />
+      <MATH equation="X">
+        <VAR id="X" />
+      </MATH>
+    </XDFAXIS>
+    <XDFAXIS id="z">
+      <EMBEDDEDDATA mmedtypeflags="0x04" mmedaddress="0x801300" mmedelementsizebits="16" mmedrowmajor="true" mmedcolcount="1" mmedrowcount="8" mmedmajorstridebits="0" mmedminorstridebits="0" mmedelements="8" />
+      <decimalpl>3</decimalpl>
+      <min>0.5</min>
+      <max>1.5</max>
+      <outputtype>1</outputtype>
+      <datatype>1</datatype>
+      <unittype>0</unittype>
+      <DALINK index="0" />
+      <MATH equation="X/100">
+        <VAR id="X" />
+      </MATH>
+    </XDFAXIS>
+  </XDFTABLE>
+
+  <XDFTABLE uniqueid="MLHFM">
+    <title>MLHFM - Scaling MAF</title>
+    <description>Scaling MAF. Формула: X/100, тип KwUw, размер 16x1.</description>
+    <CATEGORYMEM index="0" category="0x0" />
+    <XDFAXIS id="x" uniqueid="PRESS_AXIS">
+      <embedinfo type="1" linkobjid="PRESS_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="y" uniqueid="0x0">
+      <EMBEDDEDDATA mmedtypeflags="0x02" mmedelementsizebits="16" mmedmajorstridebits="-32" mmedminorstridebits="0" />
+      <indexcount>1</indexcount>
+      <decimalpl>0</decimalpl>
+      <datatype>0</datatype>
+      <unittype>0</unittype>
+      <DALINK index="0" />
+      <LABEL index="0" value="0.0" />
+      <MATH equation="X">
+        <VAR id="X" />
+      </MATH>
+    </XDFAXIS>
+    <XDFAXIS id="z">
+      <EMBEDDEDDATA mmedtypeflags="0x04" mmedaddress="0x801310" mmedelementsizebits="16" mmedrowmajor="true" mmedcolcount="1" mmedrowcount="16" mmedmajorstridebits="0" mmedminorstridebits="0" mmedelements="16" />
+      <decimalpl>3</decimalpl>
+      <min>0.5</min>
+      <max>1.5</max>
+      <outputtype>1</outputtype>
+      <datatype>1</datatype>
+      <unittype>0</unittype>
+      <DALINK index="0" />
+      <MATH equation="X/100">
+        <VAR id="X" />
+      </MATH>
+    </XDFAXIS>
+  </XDFTABLE>
+
+  <XDFTABLE uniqueid="KFFDLBTS">
+    <title>KFFDLBTS - Дополнительные карты обогащения</title>
+    <description>Дополнительное обогащение BTS.</description>
+    <CATEGORYMEM index="0" category="0x0" />
+    <XDFAXIS id="x" uniqueid="N_AXIS">
+      <embedinfo type="1" linkobjid="N_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="y" uniqueid="RL_AXIS">
+      <embedinfo type="1" linkobjid="RL_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="z">
+      <EMBEDDEDDATA mmedtypeflags="0x04" mmedaddress="0x801320" mmedelementsizebits="16" mmedrowcount="8" mmedcolcount="6" mmedmajorstridebits="0" mmedminorstridebits="0" />
+      <decimalpl>3</decimalpl>
+      <min>0.5</min>
+      <max>1.5</max>
+      <outputtype>1</outputtype>
+      <datatype>1</datatype>
+      <unittype>0</unittype>
+      <DALINK index="0" />
+      <MATH equation="X/100">
+        <VAR id="X" />
+      </MATH>
+    </XDFAXIS>
+  </XDFTABLE>
+
+  <XDFTABLE uniqueid="KFFDLUL">
+    <title>KFFDLUL - Дополнительные карты обогащения</title>
+    <description>Дополнительное обогащение.</description>
+    <CATEGORYMEM index="0" category="0x0" />
+    <XDFAXIS id="x" uniqueid="N_AXIS">
+      <embedinfo type="1" linkobjid="N_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="y" uniqueid="RL_AXIS">
+      <embedinfo type="1" linkobjid="RL_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="z">
+      <EMBEDDEDDATA mmedtypeflags="0x04" mmedaddress="0x801330" mmedelementsizebits="16" mmedrowcount="8" mmedcolcount="6" mmedmajorstridebits="0" mmedminorstridebits="0" />
+      <decimalpl>3</decimalpl>
+      <min>0.5</min>
+      <max>1.5</max>
+      <outputtype>1</outputtype>
+      <datatype>1</datatype>
+      <unittype>0</unittype>
+      <DALINK index="0" />
+      <MATH equation="X/100">
+        <VAR id="X" />
+      </MATH>
+    </XDFAXIS>
+  </XDFTABLE>
+
+  <XDFTABLE uniqueid="KFFDLULS">
+    <title>KFFDLULS - Дополнительные карты обогащения</title>
+    <description>Дополнительное обогащение.</description>
+    <CATEGORYMEM index="0" category="0x0" />
+    <XDFAXIS id="x" uniqueid="N_AXIS">
+      <embedinfo type="1" linkobjid="N_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="y" uniqueid="RL_AXIS">
+      <embedinfo type="1" linkobjid="RL_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="z">
+      <EMBEDDEDDATA mmedtypeflags="0x04" mmedaddress="0x801340" mmedelementsizebits="16" mmedrowcount="8" mmedcolcount="6" mmedmajorstridebits="0" mmedminorstridebits="0" />
+      <decimalpl>3</decimalpl>
+      <min>0.5</min>
+      <max>1.5</max>
+      <outputtype>1</outputtype>
+      <datatype>1</datatype>
+      <unittype>0</unittype>
+      <DALINK index="0" />
+      <MATH equation="X/100">
+        <VAR id="X" />
+      </MATH>
+    </XDFAXIS>
+  </XDFTABLE>
+
+  <!-- Зажигание -->
+
+  <XDFTABLE uniqueid="KFZW">
+    <title>KFZW - Основная карта опережения зажигания</title>
+    <description>Основная карта зажигания.</description>
+    <CATEGORYMEM index="0" category="0x1" />
+    <XDFAXIS id="x" uniqueid="N_AXIS">
+      <embedinfo type="1" linkobjid="N_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="y" uniqueid="RL_AXIS">
+      <embedinfo type="1" linkobjid="RL_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="z">
+      <EMBEDDEDDATA mmedtypeflags="0x04" mmedaddress="0x801400" mmedelementsizebits="8" mmedrowcount="16" mmedcolcount="12" mmedmajorstridebits="0" mmedminorstridebits="0" />
+      <decimalpl>2</decimalpl>
+      <min>-30</min>
+      <max>60</max>
+      <outputtype>1</outputtype>
+      <datatype>0</datatype>
+      <unittype>0</unittype>
+      <DALINK index="0" />
+      <MATH equation="(X-128)*0.75">
+        <VAR id="X" />
+      </MATH>
+    </XDFAXIS>
+  </XDFTABLE>
+
+  <XDFTABLE uniqueid="KFZW2">
+    <title>KFZW2 - Вторая карта зажигания</title>
+    <description>Вторая карта зажигания.</description>
+    <CATEGORYMEM index="0" category="0x1" />
+    <XDFAXIS id="x" uniqueid="N_AXIS">
+      <embedinfo type="1" linkobjid="N_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="y" uniqueid="RL_AXIS">
+      <embedinfo type="1" linkobjid="RL_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="z">
+      <EMBEDDEDDATA mmedtypeflags="0x04" mmedaddress="0x801500" mmedelementsizebits="8" mmedrowcount="16" mmedcolcount="12" mmedmajorstridebits="0" mmedminorstridebits="0" />
+      <decimalpl>2</decimalpl>
+      <min>-30</min>
+      <max>60</max>
+      <outputtype>1</outputtype>
+      <datatype>0</datatype>
+      <unittype>0</unittype>
+      <DALINK index="0" />
+      <MATH equation="(X-128)*0.75">
+        <VAR id="X" />
+      </MATH>
+    </XDFAXIS>
+  </XDFTABLE>
+
+  <XDFTABLE uniqueid="KFZWOP">
+    <title>KFZWOP - Теоретическая карта опережения</title>
+    <description>Теоретическая карта зажигания.</description>
+    <CATEGORYMEM index="0" category="0x1" />
+    <XDFAXIS id="x" uniqueid="N_AXIS">
+      <embedinfo type="1" linkobjid="N_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="y" uniqueid="RL_AXIS">
+      <embedinfo type="1" linkobjid="RL_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="z">
+      <EMBEDDEDDATA mmedtypeflags="0x04" mmedaddress="0x801600" mmedelementsizebits="8" mmedrowcount="16" mmedcolcount="12" mmedmajorstridebits="0" mmedminorstridebits="0" />
+      <decimalpl>2</decimalpl>
+      <min>-30</min>
+      <max>60</max>
+      <outputtype>1</outputtype>
+      <datatype>0</datatype>
+      <unittype>0</unittype>
+      <DALINK index="0" />
+      <MATH equation="(X-128)*0.75">
+        <VAR id="X" />
+      </MATH>
+    </XDFAXIS>
+  </XDFTABLE>
+
+  <XDFTABLE uniqueid="KFZWMN">
+    <title>KFZWMN - Минимальное опережение</title>
+    <description>Минимальное опережение.</description>
+    <CATEGORYMEM index="0" category="0x1" />
+    <XDFAXIS id="x" uniqueid="N_AXIS">
+      <embedinfo type="1" linkobjid="N_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="y" uniqueid="RL_AXIS">
+      <embedinfo type="1" linkobjid="RL_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="z">
+      <EMBEDDEDDATA mmedtypeflags="0x04" mmedaddress="0x801700" mmedelementsizebits="8" mmedrowcount="16" mmedcolcount="12" mmedmajorstridebits="0" mmedminorstridebits="0" />
+      <decimalpl>2</decimalpl>
+      <min>-30</min>
+      <max>60</max>
+      <outputtype>1</outputtype>
+      <datatype>0</datatype>
+      <unittype>0</unittype>
+      <DALINK index="0" />
+      <MATH equation="(X-128)*0.75">
+        <VAR id="X" />
+      </MATH>
+    </XDFAXIS>
+  </XDFTABLE>
+
+  <XDFTABLE uniqueid="KFKTLRL">
+    <title>KFKTLRL - Коррекция зажигания по температуре/режиму</title>
+    <description>Коррекция зажигания по температуре.</description>
+    <CATEGORYMEM index="0" category="0x1" />
+    <XDFAXIS id="x" uniqueid="TEMP_AXIS">
+      <embedinfo type="1" linkobjid="TEMP_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="y" uniqueid="0x0">
+      <EMBEDDEDDATA mmedtypeflags="0x02" mmedelementsizebits="16" mmedmajorstridebits="-32" mmedminorstridebits="0" />
+      <indexcount>1</indexcount>
+      <decimalpl>0</decimalpl>
+      <datatype>0</datatype>
+      <unittype>0</unittype>
+      <DALINK index="0" />
+      <LABEL index="0" value="0.0" />
+      <MATH equation="X">
+        <VAR id="X" />
+      </MATH>
+    </XDFAXIS>
+    <XDFAXIS id="z">
+      <EMBEDDEDDATA mmedtypeflags="0x04" mmedaddress="0x801800" mmedelementsizebits="16" mmedrowcount="8" mmedcolcount="1" mmedmajorstridebits="0" mmedminorstridebits="0" />
+      <decimalpl>2</decimalpl>
+      <min>-20</min>
+      <max>20</max>
+      <outputtype>1</outputtype>
+      <datatype>1</datatype>
+      <unittype>0</unittype>
+      <DALINK index="0" />
+      <MATH equation="X*0.75">
+        <VAR id="X" />
+      </MATH>
+    </XDFAXIS>
+  </XDFTABLE>
+
+  <XDFTABLE uniqueid="KFLAMKOR">
+    <title>KFLAMKOR - Коррекция по лямбде/холостому ходу</title>
+    <description>Коррекция по лямбде.</description>
+    <CATEGORYMEM index="0" category="0x1" />
+    <XDFAXIS id="x" uniqueid="N_AXIS">
+      <embedinfo type="1" linkobjid="N_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="y" uniqueid="RL_AXIS">
+      <embedinfo type="1" linkobjid="RL_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="z">
+      <EMBEDDEDDATA mmedtypeflags="0x04" mmedaddress="0x801900" mmedelementsizebits="16" mmedrowcount="8" mmedcolcount="6" mmedmajorstridebits="0" mmedminorstridebits="0" />
+      <decimalpl>3</decimalpl>
+      <min>0.7</min>
+      <max>1.5</max>
+      <outputtype>1</outputtype>
+      <datatype>1</datatype>
+      <unittype>0</unittype>
+      <DALINK index="0" />
+      <MATH equation="X/1024">
+        <VAR id="X" />
+      </MATH>
+    </XDFAXIS>
+  </XDFTABLE>
+
+  <!-- Наддув / нагрузка -->
+
+  <XDFTABLE uniqueid="KFMIRL">
+    <title>KFMIRL - Карта желаемой нагрузки</title>
+    <description>Желаемая нагрузка.</description>
+    <CATEGORYMEM index="0" category="0x2" />
+    <XDFAXIS id="x" uniqueid="N_AXIS">
+      <embedinfo type="1" linkobjid="N_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="y" uniqueid="PEDAL_AXIS">
+      <embedinfo type="1" linkobjid="PEDAL_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="z">
+      <EMBEDDEDDATA mmedtypeflags="0x04" mmedaddress="0x802000" mmedelementsizebits="16" mmedrowcount="16" mmedcolcount="8" mmedmajorstridebits="0" mmedminorstridebits="0" />
+      <decimalpl>1</decimalpl>
+      <min>0</min>
+      <max>200</max>
+      <outputtype>1</outputtype>
+      <datatype>1</datatype>
+      <unittype>0</unittype>
+      <DALINK index="0" />
+      <MATH equation="X/2">
+        <VAR id="X" />
+      </MATH>
+    </XDFAXIS>
+  </XDFTABLE>
+
+  <XDFTABLE uniqueid="KFMIOP">
+    <title>KFMIOP - Ограничение момента</title>
+    <description>Ограничение момента.</description>
+    <CATEGORYMEM index="0" category="0x2" />
+    <XDFAXIS id="x" uniqueid="N_AXIS">
+      <embedinfo type="1" linkobjid="N_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="y" uniqueid="RL_AXIS">
+      <embedinfo type="1" linkobjid="RL_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="z">
+      <EMBEDDEDDATA mmedtypeflags="0x04" mmedaddress="0x802100" mmedelementsizebits="16" mmedrowcount="16" mmedcolcount="12" mmedmajorstridebits="0" mmedminorstridebits="0" />
+      <decimalpl>0</decimalpl>
+      <min>0</min>
+      <max>500</max>
+      <outputtype>1</outputtype>
+      <datatype>1</datatype>
+      <unittype>0</unittype>
+      <DALINK index="0" />
+      <MATH equation="X">
+        <VAR id="X" />
+      </MATH>
+    </XDFAXIS>
+  </XDFTABLE>
+
+  <XDFTABLE uniqueid="KFPED">
+    <title>KFPED - Карта педали акселератора</title>
+    <description>Карта педали.</description>
+    <CATEGORYMEM index="0" category="0x2" />
+    <XDFAXIS id="x" uniqueid="N_AXIS">
+      <embedinfo type="1" linkobjid="N_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="y" uniqueid="PEDAL_AXIS">
+      <embedinfo type="1" linkobjid="PEDAL_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="z">
+      <EMBEDDEDDATA mmedtypeflags="0x04" mmedaddress="0x131AE" mmedelementsizebits="16" mmedrowcount="6" mmedcolcount="8" mmedmajorstridebits="0" mmedminorstridebits="0" />
+      <decimalpl>1</decimalpl>
+      <min>0</min>
+      <max>100</max>
+      <outputtype>1</outputtype>
+      <datatype>1</datatype>
+      <unittype>0</unittype>
+      <DALINK index="0" />
+      <MATH equation="X/100">
+        <VAR id="X" />
+      </MATH>
+    </XDFAXIS>
+  </XDFTABLE>
+
+  <XDFTABLE uniqueid="KFLDRL">
+    <title>KFLDRL - Карта желаемой нагрузки по наддуву</title>
+    <description>Желаемая нагрузка по наддуву.</description>
+    <CATEGORYMEM index="0" category="0x2" />
+    <XDFAXIS id="x" uniqueid="N_AXIS">
+      <embedinfo type="1" linkobjid="N_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="y" uniqueid="PEDAL_AXIS">
+      <embedinfo type="1" linkobjid="PEDAL_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="z">
+      <EMBEDDEDDATA mmedtypeflags="0x04" mmedaddress="0x802200" mmedelementsizebits="16" mmedrowcount="16" mmedcolcount="8" mmedmajorstridebits="0" mmedminorstridebits="0" />
+      <decimalpl>1</decimalpl>
+      <min>0</min>
+      <max>200</max>
+      <outputtype>1</outputtype>
+      <datatype>1</datatype>
+      <unittype>0</unittype>
+      <DALINK index="0" />
+      <MATH equation="X/2">
+        <VAR id="X" />
+      </MATH>
+    </XDFAXIS>
+  </XDFTABLE>
+
+  <XDFTABLE uniqueid="KFLDRX">
+    <title>KFLDRX - Лимитирующая карта нагрузки по температуре</title>
+    <description>Лимит нагрузки по температуре.</description>
+    <CATEGORYMEM index="0" category="0x2" />
+    <XDFAXIS id="x" uniqueid="N_AXIS">
+      <embedinfo type="1" linkobjid="N_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="y" uniqueid="TEMP_AXIS">
+      <embedinfo type="1" linkobjid="TEMP_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="z">
+      <EMBEDDEDDATA mmedtypeflags="0x04" mmedaddress="0x802300" mmedelementsizebits="16" mmedrowcount="8" mmedcolcount="6" mmedmajorstridebits="0" mmedminorstridebits="0" />
+      <decimalpl>1</decimalpl>
+      <min>0</min>
+      <max>200</max>
+      <outputtype>1</outputtype>
+      <datatype>1</datatype>
+      <unittype>0</unittype>
+      <DALINK index="0" />
+      <MATH equation="X/2">
+        <VAR id="X" />
+      </MATH>
+    </XDFAXIS>
+  </XDFTABLE>
+
+  <XDFTABLE uniqueid="KFLDIMX">
+    <title>KFLDIMX - Максимальное давление наддува</title>
+    <description>Макс давление наддува.</description>
+    <CATEGORYMEM index="0" category="0x2" />
+    <XDFAXIS id="x" uniqueid="N_AXIS">
+      <embedinfo type="1" linkobjid="N_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="y" uniqueid="0x0">
+      <EMBEDDEDDATA mmedtypeflags="0x02" mmedelementsizebits="16" mmedmajorstridebits="-32" mmedminorstridebits="0" />
+      <indexcount>1</indexcount>
+      <decimalpl>0</decimalpl>
+      <datatype>0</datatype>
+      <unittype>0</unittype>
+      <DALINK index="0" />
+      <LABEL index="0" value="0.0" />
+      <MATH equation="X">
+        <VAR id="X" />
+      </MATH>
+    </XDFAXIS>
+    <XDFAXIS id="z">
+      <EMBEDDEDDATA mmedtypeflags="0x04" mmedaddress="0x802A00" mmedelementsizebits="16" mmedrowcount="6" mmedcolcount="1" mmedmajorstridebits="0" mmedminorstridebits="0" />
+      <decimalpl>0</decimalpl>
+      <min>1000</min>
+      <max>2500</max>
+      <outputtype>1</outputtype>
+      <datatype>1</datatype>
+      <unittype>0</unittype>
+      <DALINK index="0" />
+      <MATH equation="X">
+        <VAR id="X" />
+      </MATH>
+    </XDFAXIS>
+  </XDFTABLE>
+
+  <XDFTABLE uniqueid="WGDC">
+    <title>WGDC - Карта управления N75</title>
+    <description>Управление турбиной.</description>
+    <CATEGORYMEM index="0" category="0x2" />
+    <XDFAXIS id="x" uniqueid="N_AXIS">
+      <embedinfo type="1" linkobjid="N_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="y" uniqueid="RL_AXIS">
+      <embedinfo type="1" linkobjid="RL_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="z">
+      <EMBEDDEDDATA mmedtypeflags="0x04" mmedaddress="0x802400" mmedelementsizebits="16" mmedrowcount="12" mmedcolcount="8" mmedmajorstridebits="0" mmedminorstridebits="0" />
+      <decimalpl>1</decimalpl>
+      <min>0</min>
+      <max>100</max>
+      <outputtype>1</outputtype>
+      <datatype>1</datatype>
+      <unittype>0</unittype>
+      <DALINK index="0" />
+      <MATH equation="X/2.55">
+        <VAR id="X" />
+      </MATH>
+    </XDFAXIS>
+  </XDFTABLE>
+
+  <XDFTABLE uniqueid="WGDCC">
+    <title>WGDCC - Карта управления N75</title>
+    <description>Управление турбиной.</description>
+    <CATEGORYMEM index="0" category="0x2" />
+    <XDFAXIS id="x" uniqueid="N_AXIS">
+      <embedinfo type="1" linkobjid="N_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="y" uniqueid="RL_AXIS">
+      <embedinfo type="1" linkobjid="RL_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="z">
+      <EMBEDDEDDATA mmedtypeflags="0x04" mmedaddress="0x802500" mmedelementsizebits="16" mmedrowcount="12" mmedcolcount="8" mmedmajorstridebits="0" mmedminorstridebits="0" />
+      <decimalpl>1</decimalpl>
+      <min>0</min>
+      <max>100</max>
+      <outputtype>1</outputtype>
+      <datatype>1</datatype>
+      <unittype>0</unittype>
+      <DALINK index="0" />
+      <MATH equation="X/2.55">
+        <VAR id="X" />
+      </MATH>
+    </XDFAXIS>
+  </XDFTABLE>
+
+  <XDFTABLE uniqueid="KFVPDKSD">
+    <title>KFVPDKSD - Преобразование “педаль — нагрузка”</title>
+    <description>Преобразование педали в нагрузку.</description>
+    <CATEGORYMEM index="0" category="0x2" />
+    <XDFAXIS id="x" uniqueid="N_AXIS">
+      <embedinfo type="1" linkobjid="N_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="y" uniqueid="PEDAL_AXIS">
+      <embedinfo type="1" linkobjid="PEDAL_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="z">
+      <EMBEDDEDDATA mmedtypeflags="0x04" mmedaddress="0x802600" mmedelementsizebits="16" mmedrowcount="8" mmedcolcount="6" mmedmajorstridebits="0" mmedminorstridebits="0" />
+      <decimalpl>1</decimalpl>
+      <min>0</min>
+      <max>100</max>
+      <outputtype>1</outputtype>
+      <datatype>1</datatype>
+      <unittype>0</unittype>
+      <DALINK index="0" />
+      <MATH equation="X/100">
+        <VAR id="X" />
+      </MATH>
+    </XDFAXIS>
+  </XDFTABLE>
+
+  <XDFTABLE uniqueid="KFVPDKSE">
+    <title>KFVPDKSE - Порог педали для перехода в WOT</title>
+    <description>Порог педали для WOT.</description>
+    <CATEGORYMEM index="0" category="0x2" />
+    <XDFAXIS id="x" uniqueid="N_AXIS">
+      <embedinfo type="1" linkobjid="N_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="y" uniqueid="0x0">
+      <EMBEDDEDDATA mmedtypeflags="0x02" mmedelementsizebits="16" mmedmajorstridebits="-32" mmedminorstridebits="0" />
+      <indexcount>1</indexcount>
+      <decimalpl>0</decimalpl>
+      <datatype>0</datatype>
+      <unittype>0</unittype>
+      <DALINK index="0" />
+      <LABEL index="0" value="0.0" />
+      <MATH equation="X">
+        <VAR id="X" />
+      </MATH>
+    </XDFAXIS>
+    <XDFAXIS id="z">
+      <EMBEDDEDDATA mmedtypeflags="0x04" mmedaddress="0x802700" mmedelementsizebits="16" mmedrowcount="8" mmedcolcount="1" mmedmajorstridebits="0" mmedminorstridebits="0" />
+      <decimalpl>1</decimalpl>
+      <min>0</min>
+      <max>100</max>
+      <outputtype>1</outputtype>
+      <datatype>1</datatype>
+      <unittype>0</unittype>
+      <DALINK index="0" />
+      <MATH equation="X/100">
+        <VAR id="X" />
+      </MATH>
+    </XDFAXIS>
+  </XDFTABLE>
+
+  <!-- Ограничения / лимитеры -->
+
+  <XDFCONSTANT uniqueid="LDRXN">
+    <title>LDRXN - Максимально допустимая нагрузка</title>
+    <description>Лимит нагрузки.</description>
+    <CATEGORYMEM index="0" category="0x3" />
+    <EMBEDDEDDATA mmedtypeflags="0x02" mmedaddress="0x803000" mmedelementsizebits="16" />
+    <decimalpl>2</decimalpl>
+    <min>0</min>
+    <max>1</max>
+    <outputtype>1</outputtype>
+    <datatype>1</datatype>
+    <unittype>0</unittype>
+    <DALINK index="0" />
+    <MATH equation="X/100">
+      <VAR id="X" />
+    </MATH>
+  </XDFCONSTANT>
+
+  <XDFCONSTANT uniqueid="NMAX">
+    <title>NMAX - Лимитер оборотов</title>
+    <description>Рев-лимитер.</description>
+    <CATEGORYMEM index="0" category="0x3" />
+    <EMBEDDEDDATA mmedtypeflags="0x02" mmedaddress="0x803100" mmedelementsizebits="16" />
+    <decimalpl>0</decimalpl>
+    <min>0</min>
+    <max>8000</max>
+    <outputtype>1</outputtype>
+    <datatype>1</datatype>
+    <unittype>0</unittype>
+    <DALINK index="0" />
+    <MATH equation="X*10">
+      <VAR id="X" />
+    </MATH>
+  </XDFCONSTANT>
+
+  <XDFCONSTANT uniqueid="DNMAXH">
+    <title>DNMAXH - Лимитер оборотов</title>
+    <description>Лимитер оборотов.</description>
+    <CATEGORYMEM index="0" category="0x3" />
+    <EMBEDDEDDATA mmedtypeflags="0x02" mmedaddress="0x803110" mmedelementsizebits="16" />
+    <decimalpl>0</decimalpl>
+    <min>0</min>
+    <max>8000</max>
+    <outputtype>1</outputtype>
+    <datatype>1</datatype>
+    <unittype>0</unittype>
+    <DALINK index="0" />
+    <MATH equation="X*10">
+      <VAR id="X" />
+    </MATH>
+  </XDFCONSTANT>
+
+  <XDFCONSTANT uniqueid="NMAXOG">
+    <title>NMAXOG - Лимитер оборотов</title>
+    <description>Лимитер оборотов.</description>
+    <CATEGORYMEM index="0" category="0x3" />
+    <EMBEDDEDDATA mmedtypeflags="0x02" mmedaddress="0x803120" mmedelementsizebits="16" />
+    <decimalpl>0</decimalpl>
+    <min>0</min>
+    <max>8000</max>
+    <outputtype>1</outputtype>
+    <datatype>1</datatype>
+    <unittype>0</unittype>
+    <DALINK index="0" />
+    <MATH equation="X*10">
+      <VAR id="X" />
+    </MATH>
+  </XDFCONSTANT>
+
+  <XDFCONSTANT uniqueid="VNMX">
+    <title>VNMX - Ограничение скорости (Vmax)</title>
+    <description>Ограничение скорости.</description>
+    <CATEGORYMEM index="0" category="0x3" />
+    <EMBEDDEDDATA mmedtypeflags="0x02" mmedaddress="0x803130" mmedelementsizebits="16" />
+    <decimalpl>0</decimalpl>
+    <min>0</min>
+    <max>300</max>
+    <outputtype>1</outputtype>
+    <datatype>1</datatype>
+    <unittype>0</unittype>
+    <DALINK index="0" />
+    <MATH equation="X">
+      <VAR id="X" />
+    </MATH>
+  </XDFCONSTANT>
+
+  <XDFCONSTANT uniqueid="TMOTNMX">
+    <title>TMOTNMX - Лимит температуры (ОЖ)</title>
+    <description>Лимит температуры ОЖ.</description>
+    <CATEGORYMEM index="0" category="0x3" />
+    <EMBEDDEDDATA mmedtypeflags="0x02" mmedaddress="0x803140" mmedelementsizebits="8" />
+    <decimalpl>0</decimalpl>
+    <min>-40</min>
+    <max>150</max>
+    <outputtype>1</outputtype>
+    <datatype>0</datatype>
+    <unittype>0</unittype>
+    <DALINK index="0" />
+    <MATH equation="X-40">
+      <VAR id="X" />
+    </MATH>
+  </XDFCONSTANT>
+
+  <XDFCONSTANT uniqueid="TNMXH">
+    <title>TNMXH - Лимит температуры</title>
+    <description>Лимит температуры.</description>
+    <CATEGORYMEM index="0" category="0x3" />
+    <EMBEDDEDDATA mmedtypeflags="0x02" mmedaddress="0x803150" mmedelementsizebits="8" />
+    <decimalpl>0</decimalpl>
+    <min>-40</min>
+    <max>150</max>
+    <outputtype>1</outputtype>
+    <datatype>0</datatype>
+    <unittype>0</unittype>
+    <DALINK index="0" />
+    <MATH equation="X-40">
+      <VAR id="X" />
+    </MATH>
+  </XDFCONSTANT>
+
+  <XDFCONSTANT uniqueid="TMNSMN">
+    <title>TMNSMN - Лимит температуры (масло)</title>
+    <description>Лимит температуры масла.</description>
+    <CATEGORYMEM index="0" category="0x3" />
+    <EMBEDDEDDATA mmedtypeflags="0x02" mmedaddress="0x803160" mmedelementsizebits="8" />
+    <decimalpl>0</decimalpl>
+    <min>-40</min>
+    <max>150</max>
+    <outputtype>1</outputtype>
+    <datatype>0</datatype>
+    <unittype>0</unittype>
+    <DALINK index="0" />
+    <MATH equation="X-40">
+      <VAR id="X" />
+    </MATH>
+  </XDFCONSTANT>
+
+  <!-- Датчики / коррекции -->
+
+  <XDFTABLE uniqueid="FKKVS">
+    <title>FKKVS - Коррекция по напряжению (фаза, etc)</title>
+    <description>Коррекция по напряжению форсунок.</description>
+    <CATEGORYMEM index="0" category="0x4" />
+    <XDFAXIS id="x" uniqueid="0x2006">
+      <EMBEDDEDDATA mmedtypeflags="0x02" mmedaddress="0x807500" mmedelementsizebits="16" mmedcolcount="8" mmedmajorstridebits="16" mmedminorstridebits="0" />
+      <units>V</units>
+      <indexcount>8</indexcount>
+      <decimalpl>1</decimalpl>
+      <embedinfo type="1" />
+      <datatype>0</datatype>
+      <unittype>0</unittype>
+      <DALINK index="0" />
+      <MATH equation="X">
+        <VAR id="X" />
+      </MATH>
+    </XDFAXIS>
+    <XDFAXIS id="y" uniqueid="0x0">
+      <EMBEDDEDDATA mmedtypeflags="0x02" mmedelementsizebits="16" mmedmajorstridebits="-32" mmedminorstridebits="0" />
+      <indexcount>1</indexcount>
+      <decimalpl>0</decimalpl>
+      <datatype>0</datatype>
+      <unittype>0</unittype>
+      <DALINK index="0" />
+      <LABEL index="0" value="0.0" />
+      <MATH equation="X">
+        <VAR id="X" />
+      </MATH>
+    </XDFAXIS>
+    <XDFAXIS id="z">
+      <EMBEDDEDDATA mmedtypeflags="0x04" mmedaddress="0x804000" mmedelementsizebits="16" mmedrowcount="8" mmedcolcount="1" mmedmajorstridebits="0" mmedminorstridebits="0" />
+      <decimalpl>3</decimalpl>
+      <min>0</min>
+      <max>5</max>
+      <outputtype>1</outputtype>
+      <datatype>1</datatype>
+      <unittype>0</unittype>
+      <DALINK index="0" />
+      <MATH equation="X/1000">
+        <VAR id="X" />
+      </MATH>
+    </XDFAXIS>
+  </XDFTABLE>
+
+  <XDFTABLE uniqueid="KFW2">
+    <title>KFW2 - Коррекция по датчику давления/температуры</title>
+    <description>Коррекция по датчику.</description>
+    <CATEGORYMEM index="0" category="0x4" />
+    <XDFAXIS id="x" uniqueid="PRESS_AXIS">
+      <embedinfo type="1" linkobjid="PRESS_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="y" uniqueid="TEMP_AXIS">
+      <embedinfo type="1" linkobjid="TEMP_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="z">
+      <EMBEDDEDDATA mmedtypeflags="0x04" mmedaddress="0x804100" mmedelementsizebits="16" mmedrowcount="8" mmedcolcount="6" mmedmajorstridebits="0" mmedminorstridebits="0" />
+      <decimalpl>3</decimalpl>
+      <min>0.5</min>
+      <max>1.5</max>
+      <outputtype>1</outputtype>
+      <datatype>1</datatype>
+      <unittype>0</unittype>
+      <DALINK index="0" />
+      <MATH equation="X/100">
+        <VAR id="X" />
+      </MATH>
+    </XDFAXIS>
+  </XDFTABLE>
+
+  <XDFTABLE uniqueid="KFKHFM">
+    <title>KFKHFM - Коррекция MAF</title>
+    <description>Коррекция MAF.</description>
+    <CATEGORYMEM index="0" category="0x4" />
+    <XDFAXIS id="x" uniqueid="PRESS_AXIS">
+      <embedinfo type="1" linkobjid="PRESS_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="y" uniqueid="0x0">
+      <EMBEDDEDDATA mmedtypeflags="0x02" mmedelementsizebits="16" mmedmajorstridebits="-32" mmedminorstridebits="0" />
+      <indexcount>1</indexcount>
+      <decimalpl>0</decimalpl>
+      <datatype>0</datatype>
+      <unittype>0</unittype>
+      <DALINK index="0" />
+      <LABEL index="0" value="0.0" />
+      <MATH equation="X">
+        <VAR id="X" />
+      </MATH>
+    </XDFAXIS>
+    <XDFAXIS id="z">
+      <EMBEDDEDDATA mmedtypeflags="0x04" mmedaddress="0x801300" mmedelementsizebits="16" mmedrowcount="8" mmedcolcount="1" mmedmajorstridebits="0" mmedminorstridebits="0" />
+      <decimalpl>3</decimalpl>
+      <min>0.5</min>
+      <max>1.5</max>
+      <outputtype>1</outputtype>
+      <datatype>1</datatype>
+      <unittype>0</unittype>
+      <DALINK index="0" />
+      <MATH equation="X/100">
+        <VAR id="X" />
+      </MATH>
+    </XDFAXIS>
+  </XDFTABLE>
+
+  <XDFTABLE uniqueid="KFVPDKSD">
+    <title>KFVPDKSD - Преобразование “педаль — нагрузка”</title>
+    <description>Преобразование педали в нагрузку.</description>
+    <CATEGORYMEM index="0" category="0x4" />
+    <XDFAXIS id="x" uniqueid="N_AXIS">
+      <embedinfo type="1" linkobjid="N_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="y" uniqueid="PEDAL_AXIS">
+      <embedinfo type="1" linkobjid="PEDAL_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="z">
+      <EMBEDDEDDATA mmedtypeflags="0x04" mmedaddress="0x802600" mmedelementsizebits="16" mmedrowcount="8" mmedcolcount="6" mmedmajorstridebits="0" mmedminorstridebits="0" />
+      <decimalpl>1</decimalpl>
+      <min>0</min>
+      <max>100</max>
+      <outputtype>1</outputtype>
+      <datatype>1</datatype>
+      <unittype>0</unittype>
+      <DALINK index="0" />
+      <MATH equation="X/100">
+        <VAR id="X" />
+      </MATH>
+    </XDFAXIS>
+  </XDFTABLE>
+
+  <XDFTABLE uniqueid="KFVPDKSE">
+    <title>KFVPDKSE - Порог педали для перехода в WOT</title>
+    <description>Порог педали для WOT.</description>
+    <CATEGORYMEM index="0" category="0x4" />
+    <XDFAXIS id="x" uniqueid="N_AXIS">
+      <embedinfo type="1" linkobjid="N_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="y" uniqueid="0x0">
+      <EMBEDDEDDATA mmedtypeflags="0x02" mmedelementsizebits="16" mmedmajorstridebits="-32" mmedminorstridebits="0" />
+      <indexcount>1</indexcount>
+      <decimalpl>0</decimalpl>
+      <datatype>0</datatype>
+      <unittype>0</unittype>
+      <DALINK index="0" />
+      <LABEL index="0" value="0.0" />
+      <MATH equation="X">
+        <VAR id="X" />
+      </MATH>
+    </XDFAXIS>
+    <XDFAXIS id="z">
+      <EMBEDDEDDATA mmedtypeflags="0x04" mmedaddress="0x802700" mmedelementsizebits="16" mmedrowcount="8" mmedcolcount="1" mmedmajorstridebits="0" mmedminorstridebits="0" />
+      <decimalpl>1</decimalpl>
+      <min>0</min>
+      <max>100</max>
+      <outputtype>1</outputtype>
+      <datatype>1</datatype>
+      <unittype>0</unittype>
+      <DALINK index="0" />
+      <MATH equation="X/100">
+        <VAR id="X" />
+      </MATH>
+    </XDFAXIS>
+  </XDFTABLE>
+
+  <!-- Экология / диагностика -->
+
+  <XDFCONSTANT uniqueid="O2_CAT_OFF">
+    <title>O2_CAT_OFF - Флаг отключения экологии</title>
+    <description>Отключить катализатор (0).</description>
+    <CATEGORYMEM index="0" category="0x5" />
+    <EMBEDDEDDATA mmedtypeflags="0x02" mmedaddress="0x805000" mmedelementsizebits="8" />
+    <decimalpl>0</decimalpl>
+    <min>0</min>
+    <max>1</max>
+    <outputtype>1</outputtype>
+    <datatype>0</datatype>
+    <unittype>0</unittype>
+    <DALINK index="0" />
+    <MATH equation="X">
+      <VAR id="X" />
+    </MATH>
+  </XDFCONSTANT>
+
+  <XDFCONSTANT uniqueid="CDLASH">
+    <title>CDLASH - Флаг отключения экологии</title>
+    <description>Отключить вторую лямбду (0).</description>
+    <CATEGORYMEM index="0" category="0x5" />
+    <EMBEDDEDDATA mmedtypeflags="0x02" mmedaddress="0x805010" mmedelementsizebits="8" />
+    <decimalpl>0</decimalpl>
+    <min>0</min>
+    <max>1</max>
+    <outputtype>1</outputtype>
+    <datatype>0</datatype>
+    <unittype>0</unittype>
+    <DALINK index="0" />
+    <MATH equation="X">
+      <VAR id="X" />
+    </MATH>
+  </XDFCONSTANT>
+
+  <XDFCONSTANT uniqueid="CDPUR">
+    <title>CDPUR - Флаг отключения экологии</title>
+    <description>Отключить EVAP (0).</description>
+    <CATEGORYMEM index="0" category="0x5" />
+    <EMBEDDEDDATA mmedtypeflags="0x02" mmedaddress="0x805020" mmedelementsizebits="8" />
+    <decimalpl>0</decimalpl>
+    <min>0</min>
+    <max>1</max>
+    <outputtype>1</outputtype>
+    <datatype>0</datatype>
+    <unittype>0</unittype>
+    <DALINK index="0" />
+    <MATH equation="X">
+      <VAR id="X" />
+    </MATH>
+  </XDFCONSTANT>
+
+  <XDFCONSTANT uniqueid="CDSLS">
+    <title>CDSLS - Флаг отключения экологии</title>
+    <description>Отключить EVAP (0).</description>
+    <CATEGORYMEM index="0" category="0x5" />
+    <EMBEDDEDDATA mmedtypeflags="0x02" mmedaddress="0x805030" mmedelementsizebits="8" />
+    <decimalpl>0</decimalpl>
+    <min>0</min>
+    <max>1</max>
+    <outputtype>1</outputtype>
+    <datatype>0</datatype>
+    <unittype>0</unittype>
+    <DALINK index="0" />
+    <MATH equation="X">
+      <VAR id="X" />
+    </MATH>
+  </XDFCONSTANT>
+
+  <XDFCONSTANT uniqueid="CDTES">
+    <title>CDTES - Флаг отключения экологии</title>
+    <description>Отключить диагностику (0).</description>
+    <CATEGORYMEM index="0" category="0x5" />
+    <EMBEDDEDDATA mmedtypeflags="0x02" mmedaddress="0x805040" mmedelementsizebits="8" />
+    <decimalpl>0</decimalpl>
+    <min>0</min>
+    <max>1</max>
+    <outputtype>1</outputtype>
+    <datatype>0</datatype>
+    <unittype>0</unittype>
+    <DALINK index="0" />
+    <MATH equation="X">
+      <VAR id="X" />
+    </MATH>
+  </XDFCONSTANT>
+
+  <XDFCONSTANT uniqueid="CDKAT">
+    <title>CDKAT - Флаг отключения экологии</title>
+    <description>Отключить катализатор (0).</description>
+    <CATEGORYMEM index="0" category="0x5" />
+    <EMBEDDEDDATA mmedtypeflags="0x02" mmedaddress="0x805050" mmedelementsizebits="8" />
+    <decimalpl>0</decimalpl>
+    <min>0</min>
+    <max>1</max>
+    <outputtype>1</outputtype>
+    <datatype>0</datatype>
+    <unittype>0</unittype>
+    <DALINK index="0" />
+    <MATH equation="X">
+      <VAR id="X" />
+    </MATH>
+  </XDFCONSTANT>
+
+  <XDFCONSTANT uniqueid="SVV_TAB">
+    <title>SVV_TAB - Флаг отключения экологии</title>
+    <description>Отключить SAI (0).</description>
+    <CATEGORYMEM index="0" category="0x5" />
+    <EMBEDDEDDATA mmedtypeflags="0x02" mmedaddress="0x805060" mmedelementsizebits="8" />
+    <decimalpl>0</decimalpl>
+    <min>0</min>
+    <max>1</max>
+    <outputtype>1</outputtype>
+    <datatype>0</datatype>
+    <unittype>0</unittype>
+    <DALINK index="0" />
+    <MATH equation="X">
+      <VAR id="X" />
+    </MATH>
+  </XDFCONSTANT>
+
+  <!-- DTC-свитчи для отключения ошибок -->
+
+  <XDFCONSTANT uniqueid="CWSAWE">
+    <title>CWSAWE - Флаг отключения SAI</title>
+    <description>Отключить SAI (0).</description>
+    <CATEGORYMEM index="0" category="0x5" />
+    <EMBEDDEDDATA mmedtypeflags="0x02" mmedaddress="0x805070" mmedelementsizebits="8" />
+    <decimalpl>0</decimalpl>
+    <min>0</min>
+    <max>1</max>
+    <outputtype>1</outputtype>
+    <datatype>0</datatype>
+    <unittype>0</unittype>
+    <DALINK index="0" />
+    <MATH equation="X">
+      <VAR id="X" />
+    </MATH>
+  </XDFCONSTANT>
+
+  <XDFCONSTANT uniqueid="CWKONABG">
+    <title>CWKONABG - Флаг отключения экологии</title>
+    <description>Отключить экологию (0).</description>
+    <CATEGORYMEM index="0" category="0x5" />
+    <EMBEDDEDDATA mmedtypeflags="0x02" mmedaddress="0x805080" mmedelementsizebits="8" />
+    <decimalpl>0</decimalpl>
+    <min>0</min>
+    <max>1</max>
+    <outputtype>1</outputtype>
+    <datatype>0</datatype>
+    <unittype>0</unittype>
+    <DALINK index="0" />
+    <MATH equation="X">
+      <VAR id="X" />
+    </MATH>
+  </XDFCONSTANT>
+
+  <XDFCONSTANT uniqueid="MSLUB">
+    <title>MSLUB - Флаг отключения SAI</title>
+    <description>Отключить SAI (0).</description>
+    <CATEGORYMEM index="0" category="0x5" />
+    <EMBEDDEDDATA mmedtypeflags="0x02" mmedaddress="0x805090" mmedelementsizebits="8" />
+    <decimalpl>0</decimalpl>
+    <min>0</min>
+    <max>1</max>
+    <outputtype>1</outputtype>
+    <datatype>0</datatype>
+    <unittype>0</unittype>
+    <DALINK index="0" />
+    <MATH equation="X">
+      <VAR id="X" />
+    </MATH>
+  </XDFCONSTANT>
+
+  <XDFCONSTANT uniqueid="CWMDAPP">
+    <title>CWMDAPP - Флаг отключения EVAP</title>
+    <description>Отключить EVAP (0).</description>
+    <CATEGORYMEM index="0" category="0x5" />
+    <EMBEDDEDDATA mmedtypeflags="0x02" mmedaddress="0x8050A0" mmedelementsizebits="8" />
+    <decimalpl>0</decimalpl>
+    <min>0</min>
+    <max>1</max>
+    <outputtype>1</outputtype>
+    <datatype>0</datatype>
+    <unittype>0</unittype>
+    <DALINK index="0" />
+    <MATH equation="X">
+      <VAR id="X" />
+    </MATH>
+  </XDFCONSTANT>
+
+  <XDFCONSTANT uniqueid="CDLSH">
+    <title>CDLSH - Флаг отключения второй лямбды</title>
+    <description>Отключить вторую лямбду (0).</description>
+    <CATEGORYMEM index="0" category="0x5" />
+    <EMBEDDEDDATA mmedtypeflags="0x02" mmedaddress="0x8050B0" mmedelementsizebits="8" />
+    <decimalpl>0</decimalpl>
+    <min>0</min>
+    <max>1</max>
+    <outputtype>1</outputtype>
+    <datatype>0</datatype>
+    <unittype>0</unittype>
+    <DALINK index="0" />
+    <MATH equation="X">
+      <VAR id="X" />
+    </MATH>
+  </XDFCONSTANT>
+
+  <XDFCONSTANT uniqueid="CDHSH">
+    <title>CDHSH - Флаг отключения второй лямбды</title>
+    <description>Отключить вторую лямбду (0).</description>
+    <CATEGORYMEM index="0" category="0x5" />
+    <EMBEDDEDDATA mmedtypeflags="0x02" mmedaddress="0x8050C0" mmedelementsizebits="8" />
+    <decimalpl>0</decimalpl>
+    <min>0</min>
+    <max>1</max>
+    <outputtype>1</outputtype>
+    <datatype>0</datatype>
+    <unittype>0</unittype>
+    <DALINK index="0" />
+    <MATH equation="X">
+      <VAR id="X" />
+    </MATH>
+  </XDFCONSTANT>
+
+  <XDFCONSTANT uniqueid="KFDKAT">
+    <title>KFDKAT - Флаг отключения катализатора</title>
+    <description>Отключить катализатор (0).</description>
+    <CATEGORYMEM index="0" category="0x5" />
+    <EMBEDDEDDATA mmedtypeflags="0x02" mmedaddress="0x8050D0" mmedelementsizebits="8" />
+    <decimalpl>0</decimalpl>
+    <min>0</min>
+    <max>1</max>
+    <outputtype>1</outputtype>
+    <datatype>0</datatype>
+    <unittype>0</unittype>
+    <DALINK index="0" />
+    <MATH equation="X">
+      <VAR id="X" />
+    </MATH>
+  </XDFCONSTANT>
+
+  <XDFCONSTANT uniqueid="KATMON">
+    <title>KATMON - Флаг отключения катализатора</title>
+    <description>Отключить мониторинг катализатора (0).</description>
+    <CATEGORYMEM index="0" category="0x5" />
+    <EMBEDDEDDATA mmedtypeflags="0x02" mmedaddress="0x8050E0" mmedelementsizebits="8" />
+    <decimalpl>0</decimalpl>
+    <min>0</min>
+    <max>1</max>
+    <outputtype>1</outputtype>
+    <datatype>0</datatype>
+    <unittype>0</unittype>
+    <DALINK index="0" />
+    <MATH equation="X">
+      <VAR id="X" />
+    </MATH>
+  </XDFCONSTANT>
+
+  <XDFCONSTANT uniqueid="KATBTS">
+    <title>KATBTS - Флаг отключения катализатора</title>
+    <description>Отключить BTS для катализатора (0).</description>
+    <CATEGORYMEM index="0" category="0x5" />
+    <EMBEDDEDDATA mmedtypeflags="0x02" mmedaddress="0x8050F0" mmedelementsizebits="8" />
+    <decimalpl>0</decimalpl>
+    <min>0</min>
+    <max>1</max>
+    <outputtype>1</outputtype>
+    <datatype>0</datatype>
+    <unittype>0</unittype>
+    <DALINK index="0" />
+    <MATH equation="X">
+      <VAR id="X" />
+    </MATH>
+  </XDFCONSTANT>
+
+  <XDFCONSTANT uniqueid="KATHEAT">
+    <title>KATHEAT - Флаг отключения катализатора</title>
+    <description>Отключить подогрев катализатора (0).</description>
+    <CATEGORYMEM index="0" category="0x5" />
+    <EMBEDDEDDATA mmedtypeflags="0x02" mmedaddress="0x805100" mmedelementsizebits="8" />
+    <decimalpl>0</decimalpl>
+    <min>0</min>
+    <max>1</max>
+    <outputtype>1</outputtype>
+    <datatype>0</datatype>
+    <unittype>0</unittype>
+    <DALINK index="0" />
+    <MATH equation="X">
+      <VAR id="X" />
+    </MATH>
+  </XDFCONSTANT>
+
+  <XDFCONSTANT uniqueid="KATDIAG">
+    <title>KATDIAG - Флаг отключения катализатора</title>
+    <description>Отключить диагностику катализатора (0).</description>
+    <CATEGORYMEM index="0" category="0x5" />
+    <EMBEDDEDDATA mmedtypeflags="0x02" mmedaddress="0x805110" mmedelementsizebits="8" />
+    <decimalpl>0</decimalpl>
+    <min>0</min>
+    <max>1</max>
+    <outputtype>1</outputtype>
+    <datatype>0</datatype>
+    <unittype>0</unittype>
+    <DALINK index="0" />
+    <MATH equation="X">
+      <VAR id="X" />
+    </MATH>
+  </XDFCONSTANT>
+
+  <XDFCONSTANT uniqueid="CDKVS">
+    <title>CDKVS - Флаг отключения второй лямбды</title>
+    <description>Отключить вторую лямбду (0).</description>
+    <CATEGORYMEM index="0" category="0x5" />
+    <EMBEDDEDDATA mmedtypeflags="0x02" mmedaddress="0x805120" mmedelementsizebits="8" />
+    <decimalpl>0</decimalpl>
+    <min>0</min>
+    <max>1</max>
+    <outputtype>1</outputtype>
+    <datatype>0</datatype>
+    <unittype>0</unittype>
+    <DALINK index="0" />
+    <MATH equation="X">
+      <VAR id="X" />
+    </MATH>
+  </XDFCONSTANT>
+
+  <!-- Вспомогательные карты -->
+
+  <XDFTABLE uniqueid="KFMI">
+    <title>KFMI - Карты момента</title>
+    <description>Карты момента.</description>
+    <CATEGORYMEM index="0" category="0x6" />
+    <XDFAXIS id="x" uniqueid="N_AXIS">
+      <embedinfo type="1" linkobjid="N_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="y" uniqueid="RL_AXIS">
+      <embedinfo type="1" linkobjid="RL_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="z">
+      <EMBEDDEDDATA mmedtypeflags="0x04" mmedaddress="0x806000" mmedelementsizebits="16" mmedrowcount="16" mmedcolcount="12" mmedmajorstridebits="0" mmedminorstridebits="0" />
+      <decimalpl>0</decimalpl>
+      <min>0</min>
+      <max>500</max>
+      <outputtype>1</outputtype>
+      <datatype>1</datatype>
+      <unittype>0</unittype>
+      <DALINK index="0" />
+      <MATH equation="X">
+        <VAR id="X" />
+      </MATH>
+    </XDFAXIS>
+  </XDFTABLE>
+
+  <XDFTABLE uniqueid="KFMIZUOF">
+    <title>KFMIZUOF - Карты момента</title>
+    <description>Карты момента для режимов.</description>
+    <CATEGORYMEM index="0" category="0x6" />
+    <XDFAXIS id="x" uniqueid="N_AXIS">
+      <embedinfo type="1" linkobjid="N_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="y" uniqueid="RL_AXIS">
+      <embedinfo type="1" linkobjid="RL_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="z">
+      <EMBEDDEDDATA mmedtypeflags="0x04" mmedaddress="0x806010" mmedelementsizebits="16" mmedrowcount="16" mmedcolcount="12" mmedmajorstridebits="0" mmedminorstridebits="0" />
+      <decimalpl>0</decimalpl>
+      <min>0</min>
+      <max>500</max>
+      <outputtype>1</outputtype>
+      <datatype>1</datatype>
+      <unittype>0</unittype>
+      <DALINK index="0" />
+      <MATH equation="X">
+        <VAR id="X" />
+      </MATH>
+    </XDFAXIS>
+  </XDFTABLE>
+
+  <XDFTABLE uniqueid="KFMIZUFIL">
+    <title>KFMIZUFIL - Карты момента</title>
+    <description>Карты момента для режимов.</description>
+    <CATEGORYMEM index="0" category="0x6" />
+    <XDFAXIS id="x" uniqueid="N_AXIS">
+      <embedinfo type="1" linkobjid="N_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="y" uniqueid="RL_AXIS">
+      <embedinfo type="1" linkobjid="RL_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="z">
+      <EMBEDDEDDATA mmedtypeflags="0x04" mmedaddress="0x806020" mmedelementsizebits="16" mmedrowcount="16" mmedcolcount="12" mmedmajorstridebits="0" mmedminorstridebits="0" />
+      <decimalpl>0</decimalpl>
+      <min>0</min>
+      <max>500</max>
+      <outputtype>1</outputtype>
+      <datatype>1</datatype>
+      <unittype>0</unittype>
+      <DALINK index="0" />
+      <MATH equation="X">
+        <VAR id="X" />
+      </MATH>
+    </XDFAXIS>
+  </XDFTABLE>
+
+  <XDFTABLE uniqueid="KFFDLUL">
+    <title>KFFDLUL - Факторы для коррекции подачи топлива</title>
+    <description>Коррекция топлива.</description>
+    <CATEGORYMEM index="0" category="0x6" />
+    <XDFAXIS id="x" uniqueid="N_AXIS">
+      <embedinfo type="1" linkobjid="N_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="y" uniqueid="RL_AXIS">
+      <embedinfo type="1" linkobjid="RL_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="z">
+      <EMBEDDEDDATA mmedtypeflags="0x04" mmedaddress="0x801330" mmedelementsizebits="16" mmedrowcount="8" mmedcolcount="6" mmedmajorstridebits="0" mmedminorstridebits="0" />
+      <decimalpl>3</decimalpl>
+      <min>0.5</min>
+      <max>1.5</max>
+      <outputtype>1</outputtype>
+      <datatype>1</datatype>
+      <unittype>0</unittype>
+      <DALINK index="0" />
+      <MATH equation="X/100">
+        <VAR id="X" />
+      </MATH>
+    </XDFAXIS>
+  </XDFTABLE>
+
+  <XDFTABLE uniqueid="KFFDLULS">
+    <title>KFFDLULS - Факторы для коррекции подачи топлива</title>
+    <description>Коррекция топлива.</description>
+    <CATEGORYMEM index="0" category="0x6" />
+    <XDFAXIS id="x" uniqueid="N_AXIS">
+      <embedinfo type="1" linkobjid="N_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="y" uniqueid="RL_AXIS">
+      <embedinfo type="1" linkobjid="RL_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="z">
+      <EMBEDDEDDATA mmedtypeflags="0x04" mmedaddress="0x801340" mmedelementsizebits="16" mmedrowcount="8" mmedcolcount="6" mmedmajorstridebits="0" mmedminorstridebits="0" />
+      <decimalpl>3</decimalpl>
+      <min>0.5</min>
+      <max>1.5</max>
+      <outputtype>1</outputtype>
+      <datatype>1</datatype>
+      <unittype>0</unittype>
+      <DALINK index="0" />
+      <MATH equation="X/100">
+        <VAR id="X" />
+      </MATH>
+    </XDFAXIS>
+  </XDFTABLE>
+
+  <XDFTABLE uniqueid="KFLAMKOR">
+    <title>KFLAMKOR - Коррекция лямбды по холостому ходу</title>
+    <description>Коррекция лямбды на ХХ.</description>
+    <CATEGORYMEM index="0" category="0x6" />
+    <XDFAXIS id="x" uniqueid="N_AXIS">
+      <embedinfo type="1" linkobjid="N_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="y" uniqueid="RL_AXIS">
+      <embedinfo type="1" linkobjid="RL_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="z">
+      <EMBEDDEDDATA mmedtypeflags="0x04" mmedaddress="0x801900" mmedelementsizebits="16" mmedrowcount="8" mmedcolcount="6" mmedmajorstridebits="0" mmedminorstridebits="0" />
+      <decimalpl>3</decimalpl>
+      <min>0.7</min>
+      <max>1.5</max>
+      <outputtype>1</outputtype>
+      <datatype>1</datatype>
+      <unittype>0</unittype>
+      <DALINK index="0" />
+      <MATH equation="X/1024">
+        <VAR id="X" />
+      </MATH>
+    </XDFAXIS>
+  </XDFTABLE>
+
+  <XDFTABLE uniqueid="KFLDRXDKT">
+    <title>KFLDRXDKT - Дополнительные лимитеры</title>
+    <description>Дополнительные лимитеры.</description>
+    <CATEGORYMEM index="0" category="0x6" />
+    <XDFAXIS id="x" uniqueid="N_AXIS">
+      <embedinfo type="1" linkobjid="N_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="y" uniqueid="TEMP_AXIS">
+      <embedinfo type="1" linkobjid="TEMP_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="z">
+      <EMBEDDEDDATA mmedtypeflags="0x04" mmedaddress="0x802300" mmedelementsizebits="16" mmedrowcount="8" mmedcolcount="6" mmedmajorstridebits="0" mmedminorstridebits="0" />
+      <decimalpl>1</decimalpl>
+      <min>0</min>
+      <max>200</max>
+      <outputtype>1</outputtype>
+      <datatype>1</datatype>
+      <unittype>0</unittype>
+      <DALINK index="0" />
+      <MATH equation="X/2">
+        <VAR id="X" />
+      </MATH>
+    </XDFAXIS>
+  </XDFTABLE>
+
+  <!-- Константы -->
+
+  <XDFCONSTANT uniqueid="KRKTE">
+    <title>KRKTE - Основная константа топлива</title>
+    <description>Основная константа топлива.</description>
+    <CATEGORYMEM index="0" category="0x8" />
+    <EMBEDDEDDATA mmedtypeflags="0x02" mmedaddress="0x18B77" mmedelementsizebits="16" mmedmajorstridebits="0" mmedminorstridebits="0" />
+    <decimalpl>3</decimalpl>
+    <min>0</min>
+    <max>10</max>
+    <outputtype>1</outputtype>
+    <datatype>1</datatype>
+    <unittype>0</unittype>
+    <DALINK index="0" />
+    <MATH equation="X/1000">
+      <VAR id="X" />
+    </MATH>
+  </XDFCONSTANT>
+
+  <XDFCONSTANT uniqueid="TVUB">
+    <title>TVUB - Время открытия форсунки</title>
+    <description>Время открытия форсунки.</description>
+    <CATEGORYMEM index="0" category="0x8" />
+    <EMBEDDEDDATA mmedtypeflags="0x02" mmedaddress="0x808000" mmedelementsizebits="16" mmedmajorstridebits="0" mmedminorstridebits="0" />
+    <decimalpl>3</decimalpl>
+    <min>0</min>
+    <max>5</max>
+    <outputtype>1</outputtype>
+    <datatype>1</datatype>
+    <unittype>0</unittype>
+    <DALINK index="0" />
+    <MATH equation="X/1000">
+      <VAR id="X" />
+    </MATH>
+  </XDFCONSTANT>
+
+  <XDFCONSTANT uniqueid="MLHFM">
+    <title>MLHFM - MAF scaling</title>
+    <description>MAF scaling.</description>
+    <CATEGORYMEM index="0" category="0x8" />
+    <EMBEDDEDDATA mmedtypeflags="0x02" mmedaddress="0x808100" mmedelementsizebits="16" mmedmajorstridebits="0" mmedminorstridebits="0" />
+    <decimalpl>3</decimalpl>
+    <min>0</min>
+    <max>2</max>
+    <outputtype>1</outputtype>
+    <datatype>1</datatype>
+    <unittype>0</unittype>
+    <DALINK index="0" />
+    <MATH equation="X/100">
+      <VAR id="X" />
+    </MATH>
+  </XDFCONSTANT>
+
+  <!-- Редкие/глубокие -->
+
+  <XDFTABLE uniqueid="TABGBTS">
+    <title>TABGBTS - Карта BTS для EGT</title>
+    <description>Защита по EGT.</description>
+    <CATEGORYMEM index="0" category="0x9" />
+    <XDFAXIS id="x" uniqueid="TEMP_AXIS">
+      <embedinfo type="1" linkobjid="TEMP_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="y" uniqueid="0x0">
+      <EMBEDDEDDATA mmedtypeflags="0x02" mmedelementsizebits="16" mmedmajorstridebits="-32" mmedminorstridebits="0" />
+      <indexcount>1</indexcount>
+      <decimalpl>0</decimalpl>
+      <datatype>0</datatype>
+      <unittype>0</unittype>
+      <DALINK index="0" />
+      <LABEL index="0" value="0.0" />
+      <MATH equation="X">
+        <VAR id="X" />
+      </MATH>
+    </XDFAXIS>
+    <XDFAXIS id="z">
+      <EMBEDDEDDATA mmedtypeflags="0x04" mmedaddress="0x809000" mmedelementsizebits="16" mmedrowcount="8" mmedcolcount="1" mmedmajorstridebits="0" mmedminorstridebits="0" />
+      <decimalpl>0</decimalpl>
+      <min>0</min>
+      <max>1000</max>
+      <outputtype>1</outputtype>
+      <datatype>1</datatype>
+      <unittype>0</unittype>
+      <DALINK index="0" />
+      <MATH equation="X">
+        <VAR id="X" />
+      </MATH>
+    </XDFAXIS>
+  </XDFTABLE>
+
+  <XDFTABLE uniqueid="FBSTABGM">
+    <title>FBSTABGM - KFLBTS AFR</title>
+    <description>Карта BTS AFR.</description>
+    <CATEGORYMEM index="0" category="0x9" />
+    <XDFAXIS id="x" uniqueid="TEMP_AXIS">
+      <embedinfo type="1" linkobjid="TEMP_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="y" uniqueid="0x0">
+      <EMBEDDEDDATA mmedtypeflags="0x02" mmedelementsizebits="16" mmedmajorstridebits="-32" mmedminorstridebits="0" />
+      <indexcount>1</indexcount>
+      <decimalpl>0</decimalpl>
+      <datatype>0</datatype>
+      <unittype>0</unittype>
+      <DALINK index="0" />
+      <LABEL index="0" value="0.0" />
+      <MATH equation="X">
+        <VAR id="X" />
+      </MATH>
+    </XDFAXIS>
+    <XDFAXIS id="z">
+      <EMBEDDEDDATA mmedtypeflags="0x04" mmedaddress="0x809100" mmedelementsizebits="16" mmedrowcount="8" mmedcolcount="1" mmedmajorstridebits="0" mmedminorstridebits="0" />
+      <decimalpl>3</decimalpl>
+      <min>0.7</min>
+      <max>1.5</max>
+      <outputtype>1</outputtype>
+      <datatype>1</datatype>
+      <unittype>0</unittype>
+      <DALINK index="0" />
+      <MATH equation="X/1024">
+        <VAR id="X" />
+      </MATH>
+    </XDFAXIS>
+  </XDFTABLE>
+
+  <XDFCONSTANT uniqueid="ABGMSIGH">
+    <title>ABGMSIGH - Контроль EGT</title>
+    <description>Контроль EGT.</description>
+    <CATEGORYMEM index="0" category="0x9" />
+    <EMBEDDEDDATA mmedtypeflags="0x02" mmedaddress="0x809200" mmedelementsizebits="16" />
+    <decimalpl>0</decimalpl>
+    <min>0</min>
+    <max>1000</max>
+    <outputtype>1</outputtype>
+    <datatype>1</datatype>
+    <unittype>0</unittype>
+    <DALINK index="0" />
+    <MATH equation="X">
+      <VAR id="X" />
+    </MATH>
+  </XDFCONSTANT>
+
+  <XDFCONSTANT uniqueid="ADKATNF">
+    <title>ADKATNF - Контроль EGT</title>
+    <description>Контроль EGT.</description>
+    <CATEGORYMEM index="0" category="0x9" />
+    <EMBEDDEDDATA mmedtypeflags="0x02" mmedaddress="0x809300" mmedelementsizebits="16" />
+    <decimalpl>0</decimalpl>
+    <min>0</min>
+    <max>1000</max>
+    <outputtype>1</outputtype>
+    <datatype>1</datatype>
+    <unittype>0</unittype>
+    <DALINK index="0" />
+    <MATH equation="X">
+      <VAR id="X" />
+    </MATH>
+  </XDFCONSTANT>
+
+  <XDFCONSTANT uniqueid="AGRRMAX">
+    <title>AGRRMAX - Контроль EGT</title>
+    <description>Контроль EGT.</description>
+    <CATEGORYMEM index="0" category="0x9" />
+    <EMBEDDEDDATA mmedtypeflags="0x02" mmedaddress="0x809400" mmedelementsizebits="16" />
+    <decimalpl>0</decimalpl>
+    <min>0</min>
+    <max>1000</max>
+    <outputtype>1</outputtype>
+    <datatype>1</datatype>
+    <unittype>0</unittype>
+    <DALINK index="0" />
+    <MATH equation="X">
+      <VAR id="X" />
+    </MATH>
+  </XDFCONSTANT>
+
+  <XDFCONSTANT uniqueid="AGR_AOG">
+    <title>AGR_AOG - Оптимизация AFR</title>
+    <description>Оптимизация AFR для переходных режимов. Тип KwUw.</description>
+    <CATEGORYMEM index="0" category="0x9" />
+    <EMBEDDEDDATA mmedtypeflags="0x02" mmedaddress="0x809500" mmedelementsizebits="16" />
+    <decimalpl>3</decimalpl>
+    <min>0.7</min>
+    <max>1.5</max>
+    <outputtype>1</outputtype>
+    <datatype>1</datatype>
+    <unittype>0</unittype>
+    <DALINK index="0" />
+    <MATH equation="X/1024">
+      <VAR id="X" />
+    </MATH>
+  </XDFCONSTANT>
+
+  <XDFCONSTANT uniqueid="AGR_AUG">
+    <title>AGR_AUG - Оптимизация AFR</title>
+    <description>Оптимизация AFR для переходных режимов. Тип KwUw.</description>
+    <CATEGORYMEM index="0" category="0x9" />
+    <EMBEDDEDDATA mmedtypeflags="0x02" mmedaddress="0x809600" mmedelementsizebits="16" />
+    <decimalpl>3</decimalpl>
+    <min>0.7</min>
+    <max>1.5</max>
+    <outputtype>1</outputtype>
+    <datatype>1</datatype>
+    <unittype>0</unittype>
+    <DALINK index="0" />
+    <MATH equation="X/1024">
+      <VAR id="X" />
+    </MATH>
+  </XDFCONSTANT>
+
+  <XDFTABLE uniqueid="TABGBTS">
+    <title>TABGBTS - Карта BTS для EGT</title>
+    <description>Защита по EGT.</description>
+    <CATEGORYMEM index="0" category="0x9" />
+    <XDFAXIS id="x" uniqueid="TEMP_AXIS">
+      <embedinfo type="1" linkobjid="TEMP_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="y" uniqueid="0x0">
+      <EMBEDDEDDATA mmedtypeflags="0x02" mmedelementsizebits="16" mmedmajorstridebits="-32" mmedminorstridebits="0" />
+      <indexcount>1</indexcount>
+      <decimalpl>0</decimalpl>
+      <datatype>0</datatype>
+      <unittype>0</unittype>
+      <DALINK index="0" />
+      <LABEL index="0" value="0.0" />
+      <MATH equation="X">
+        <VAR id="X" />
+      </MATH>
+    </XDFAXIS>
+    <XDFAXIS id="z">
+      <EMBEDDEDDATA mmedtypeflags="0x04" mmedaddress="0x809000" mmedelementsizebits="16" mmedrowcount="8" mmedcolcount="1" mmedmajorstridebits="0" mmedminorstridebits="0" />
+      <decimalpl>0</decimalpl>
+      <min>0</min>
+      <max>1000</max>
+      <outputtype>1</outputtype>
+      <datatype>1</datatype>
+      <unittype>0</unittype>
+      <DALINK index="0" />
+      <MATH equation="X">
+        <VAR id="X" />
+      </MATH>
+    </XDFAXIS>
+  </XDFTABLE>
+
+  <XDFTABLE uniqueid="FBSTABGM">
+    <title>FBSTABGM - KFLBTS AFR</title>
+    <description>Карта BTS AFR.</description>
+    <CATEGORYMEM index="0" category="0x9" />
+    <XDFAXIS id="x" uniqueid="TEMP_AXIS">
+      <embedinfo type="1" linkobjid="TEMP_AXIS" />
+      <DALINK index="0" />
+    </XDFAXIS>
+    <XDFAXIS id="y" uniqueid="0x0">
+      <EMBEDDEDDATA mmedtypeflags="0x02" mmedelementsizebits="16" mmedmajorstridebits="-32" mmedminorstridebits="0" />
+      <indexcount>1</indexcount>
+      <decimalpl>0</decimalpl>
+      <datatype>0</datatype>
+      <unittype>0</unittype>
+      <DALINK index="0" />
+      <LABEL index="0" value="0.0" />
+      <MATH equation="X">
+        <VAR id="X" />
+      </MATH>
+    </XDFAXIS>
+    <XDFAXIS id="z">
+      <EMBEDDEDDATA mmedtypeflags="0x04" mmedaddress="0x809100" mmedelementsizebits="16" mmedrowcount="8" mmedcolcount="1" mmedmajorstridebits="0" mmedminorstridebits="0" />
+      <decimalpl>3</decimalpl>
+      <min>0.7</min>
+      <max>1.5</max>
+      <outputtype>1</outputtype>
+      <datatype>1</datatype>
+      <unittype>0</unittype>
+      <DALINK index="0" />
+      <MATH equation="X/1024">
+        <VAR id="X" />
+      </MATH>
+    </XDFAXIS>
+  </XDFTABLE>
+
+  <XDFCONSTANT uniqueid="ABGMSIGH">
+    <title>ABGMSIGH - Контроль EGT</title>
+    <description>Контроль температуры выхлопа.</description>
+    <CATEGORYMEM index="0" category="0x9" />
+    <EMBEDDEDDATA mmedtypeflags="0x02" mmedaddress="0x809200" mmedelementsizebits="16" />
+    <decimalpl>0</decimalpl>
+    <min>0</min>
+    <max>1000</max>
+    <outputtype>1</outputtype>
+    <datatype>1</datatype>
+    <unittype>0</unittype>
+    <DALINK index="0" />
+    <MATH equation="X">
+      <VAR id="X" />
+    </MATH>
+  </XDFCONSTANT>
+
+  <XDFCONSTANT uniqueid="ADKATNF">
+    <title>ADKATNF - Контроль EGT</title>
+    <description>Контроль EGT.</description>
+    <CATEGORYMEM index="0" category="0x9" />
+    <EMBEDDEDDATA mmedtypeflags="0x02" mmedaddress="0x809300" mmedelementsizebits="16" />
+    <decimalpl>0</decimalpl>
+    <min>0</min>
+    <max>1000</max>
+    <outputtype>1</outputtype>
+    <datatype>1</datatype>
+    <unittype>0</unittype>
+    <DALINK index="0" />
+    <MATH equation="X">
+      <VAR id="X" />
+    </MATH>
+  </XDFCONSTANT>
+
+  <XDFCONSTANT uniqueid="AGRRMAX">
+    <title>AGRRMAX - Контроль EGT</title>
+    <description>Контроль EGT.</description>
+    <CATEGORYMEM index="0" category="0x9" />
+    <EMBEDDEDDATA mmedtypeflags="0x02" mmedaddress="0x809400" mmedelementsizebits="16" />
+    <decimalpl>0</decimalpl>
+    <min>0</min>
+    <max>1000</max>
+    <outputtype>1</outputtype>
+    <datatype>1</datatype>
+    <unittype>0</unittype>
+    <DALINK index="0" />
+    <MATH equation="X">
+      <VAR id="X" />
+    </MATH>
+  </XDFCONSTANT>
+
+  <XDFCONSTANT uniqueid="AGR_AOG">
+    <title>AGR_AOG - Оптимизация AFR</title>
+    <description>Оптимизация AFR.</description>
+    <CATEGORYMEM index="0" category="0x9" />
+    <EMBEDDEDDATA mmedtypeflags="0x02" mmedaddress="0x809500" mmedelementsizebits="16" />
+    <decimalpl>3</decimalpl>
+    <min>0.7</min>
+    <max>1.5</max>
+    <outputtype>1</outputtype>
+    <datatype>1</datatype>
+    <unittype>0</unittype>
+    <DALINK index="0" />
+    <MATH equation="X/1024">
+      <VAR id="X" />
+    </MATH>
+  </XDFCONSTANT>
+
+  <XDFCONSTANT uniqueid="AGR_AUG">
+    <title>AGR_AUG - Оптимизация AFR</title>
+    <description>Оптимизация AFR.</description>
+    <CATEGORYMEM index="0" category="0x9" />
+    <EMBEDDEDDATA mmedtypeflags="0x02" mmedaddress="0x809600" mmedelementsizebits="16" />
+    <decimalpl>3</decimalpl>
+    <min>0.7</min>
+    <max>1.5</max>
+    <outputtype>1</outputtype>
+    <datatype>1</datatype>
+    <unittype>0</unittype>
+    <DALINK index="0" />
+    <MATH equation="X/1024">
+      <VAR id="X" />
+    </MATH>
+  </XDFCONSTANT>
+
+  <!-- Патч метки -->
+
+  <XDFPATCH uniqueid="Zone_Transfer_Patch">
+    <title>Патч метки 0x18140–0x1815F для снятия ограничения записи</title>
+    <description>Патч для снятия защиты записи.</description>
+    <CATEGORYMEM index="0" category="0xA" />
+    <address>0x18140</address>
+    <size>0x20</size>
+    <data>FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF</data>
+  </XDFPATCH>
+
+</XDFFORMAT>
